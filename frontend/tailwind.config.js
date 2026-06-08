@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,jsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
@@ -11,7 +12,7 @@ export default {
       },
       colors: {
         brand: {
-          50: '#eef2ff',
+          50:  '#eef2ff',
           100: '#e0e7ff',
           500: '#3b5bdb',
           600: '#3451c7',

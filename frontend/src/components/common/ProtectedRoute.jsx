@@ -1,12 +1,9 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import useAuthStore from '@/store/authStore'
 
-// ---------------------------------------------------------------------------
-// ProtectedRoute — wraps any route that requires authentication.
-// Redirects to /signin with the originally-requested path saved in state
-// so the user can be redirected back after signing in.
-// ---------------------------------------------------------------------------
-
+// Wraps routes that require authentication.
+// Redirects to /signin with the original path saved so the user
+// is sent back after logging in.
 export default function ProtectedRoute({ children }) {
   const token = useAuthStore((s) => s.token)
   const location = useLocation()
@@ -15,5 +12,12 @@ export default function ProtectedRoute({ children }) {
     return <Navigate to="/signin" state={{ from: location }} replace />
   }
 
+  return children
+}
+
+// Redirects already-authenticated users away from /signin and /signup.
+export function GuestRoute({ children }) {
+  const token = useAuthStore((s) => s.token)
+  if (token) return <Navigate to="/dashboard" replace />
   return children
 }

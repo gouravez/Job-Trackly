@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import KanbanHeader from '@/components/kanban/KanbanHeader'
 import KanbanColumn from '@/components/kanban/KanbanColumn'
@@ -14,11 +14,13 @@ const COLUMNS = [
 ]
 
 export default function KanbanPage() {
-  const { applications, addApplication, moveApplication } = useAppStore()
+  const { applications, fetchApplications, addApplication, moveApplication } = useAppStore()
 
   const [search, setSearch]     = useState('')
   const [dragOver, setDragOver] = useState(null)
   const [addingTo, setAddingTo] = useState(null)
+
+  useEffect(() => { fetchApplications() }, [fetchApplications])
 
   const filtered = applications.filter((a) => {
     const q = search.toLowerCase()
@@ -33,8 +35,8 @@ export default function KanbanPage() {
     setDragOver(null)
   }
 
-  const handleAddCard = (newCard) => {
-    addApplication(newCard)
+  const handleAddCard = async (newCard) => {
+    await addApplication(newCard)
     setAddingTo(null)
   }
 

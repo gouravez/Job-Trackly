@@ -19,12 +19,23 @@ api.interceptors.request.use((config) => {
 // ---------------------------------------------------------------------------
 // Auth endpoints
 // ---------------------------------------------------------------------------
-
 export const authService = {
-  signUp: (data) => api.post('/auth/signup', data),
-  signIn: (data) => api.post('/auth/signin', data),
-  signOut: () => api.post('/auth/signout'),
-  me: () => api.get('/auth/me'),
+  signUp: (data)   => api.post('/auth/signup', data),
+  signIn: (data)   => api.post('/auth/signin', data),
+  signOut: ()      => api.post('/auth/signout'),
+  me: ()           => api.get('/auth/me'),
+}
+
+// ---------------------------------------------------------------------------
+// Applications endpoints
+// ---------------------------------------------------------------------------
+export const applicationService = {
+  getAll:   ()           => api.get('/applications'),
+  getOne:   (id)         => api.get(`/applications/${id}`),
+  getStats: ()           => api.get('/applications/stats'),
+  create:   (data)       => api.post('/applications', data),
+  update:   (id, data)   => api.patch(`/applications/${id}`, data),
+  remove:   (id)         => api.delete(`/applications/${id}`),
 }
 
 export default api

@@ -1,32 +1,78 @@
 import { create } from 'zustand'
-import { APPLICATIONS } from '@/lib/mockData'
+import { applicationService } from '@/services/api'
 
 // ---------------------------------------------------------------------------
-// Application Store — single source of truth for all application data.
-// Both KanbanPage and ApplicationsPage read from and write to this store
-// so changes in one are instantly reflected in the other.
+// Application Store — fetches from real API, keeps local state in sync.
+// All pages (Dashboard, Applications, Kanban) read from this store.
 // ---------------------------------------------------------------------------
 
-const useAppStore = create((set) => ({
-  applications: APPLICATIONS,
+const useAppStore = create((set, get) => ({
+  applications: [],
+  isLoading:    false,
+  error:        null,
 
-  addApplication: (app) =>
-    set((state) => ({ applications: [app, ...state.applications] })),
+  // ── Fetch all ─────────────────────────────────────────────────────────────
+  fetchApplications: async () => {
+    set({ isLoading: true, error: null })
+    try {
+      const { data } = await applicationService.getAll()
+      set({ applications: data.data, isLoading: false })
+    } catch (err) {
+      set({ isLoading: false, error: err?.response?.data?.message || 'Failed to load applications' })
+    }
+  },
 
-  deleteApplication: (id) =>
-    set((state) => ({ applications: state.applications.filter((a) => a.id !== id) })),
+  // ── Add ───────────────────────────────────────────────────────────────────
+  addApplication: async (form) => {
+    try {
+      const { data } = await applicationService.create(form)
+      set((state) => ({ applications: [data.data, ...state.applications] }))
+      return { success: true }
+    } catch (err) {
+      return { success: false, error: err?.response?.data?.message || 'Failed to add application' }
+    }
+  },
 
-  updateApplication: (id, changes) =>
-    set((state) => ({
-      applications: state.applications.map((a) => (a.id === id ? { ...a, ...changes } : a)),
-    })),
+  // ── Update ────────────────────────────────────────────────────────────────
+  updateApplication: async (id, changes) => {
+    try {
+      const { data } = await applicationService.update(id, changes)
+      set((state) => ({
+        applications: state.applications.map((a) => (a.id === id ? data.data : a)),
+      }))
+      return { success: true }
+    } catch (err) {
+      return { success: false, error: err?.response?.data?.message || 'Failed to update application' }
+    }
+  },
 
-  moveApplication: (id, newStatus) =>
+  // ── Move (Kanban drag) ────────────────────────────────────────────────────
+  moveApplication: async (id, newStatus) => {
+    const numId = Number(id)
+    // Optimistic update
     set((state) => ({
       applications: state.applications.map((a) =>
-        a.id === Number(id) ? { ...a, status: newStatus } : a
+        a.id === numId ? { ...a, status: newStatus } : a
       ),
-    })),
+    }))
+    try {
+      await applicationService.update(numId, { status: newStatus })
+    } catch {
+      // Roll back on failure
+      get().fetchApplications()
+    }
+  },
+
+  // ── Delete ────────────────────────────────────────────────────────────────
+  deleteApplication: async (id) => {
+    try {
+      await applicationService.remove(id)
+      set((state) => ({ applications: state.applications.filter((a) => a.id !== id) }))
+      return { success: true }
+    } catch (err) {
+      return { success: false, error: err?.response?.data?.message || 'Failed to delete application' }
+    }
+  },
 }))
 
 export default useAppStore

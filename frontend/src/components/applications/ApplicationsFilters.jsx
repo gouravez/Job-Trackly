@@ -3,8 +3,8 @@ import FilterDropdown from '@/components/common/FilterDropdown'
 import { cn } from '@/lib/utils'
 
 const STATUS_OPTIONS = ['All', 'Saved', 'Applied', 'Assessment', 'Interview', 'Offer', 'Rejected']
-const SORT_OPTIONS    = ['Date Applied', 'Company A-Z', 'Priority']
-const DATE_OPTIONS    = ['Last 7 days', 'Last 30 days', 'Last 3 months', 'All time']
+const SORT_OPTIONS   = ['Date Applied', 'Company A-Z', 'Priority']
+const DATE_OPTIONS   = ['Last 7 days', 'Last 30 days', 'Last 3 months', 'All time']
 
 export default function ApplicationsFilters({ search, onSearch, statusFilter, onStatusFilter }) {
   return (
@@ -16,46 +16,38 @@ export default function ApplicationsFilters({ search, onSearch, statusFilter, on
           value={search}
           onChange={(e) => onSearch(e.target.value)}
           placeholder="Search by company, role, or location"
-          className="w-full h-10 pl-9 pr-4 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2f54c8]/20 focus:border-[#2f54c8]"
+          className="w-full h-10 pl-9 pr-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm text-gray-800 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2f54c8]/20 focus:border-[#2f54c8] transition-all"
         />
       </div>
 
-      {/* Status filter */}
       <FilterDropdown icon={SlidersHorizontal} label={`Status: ${statusFilter}`}>
         {STATUS_OPTIONS.map((s) => (
-          <button
-            key={s}
-            onClick={() => onStatusFilter(s)}
-            className={cn(
-              'block w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors',
-              statusFilter === s && 'text-[#2f54c8] font-semibold',
-            )}
-          >
+          <button key={s} onClick={() => onStatusFilter(s)}
+            className={cn('block w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors',
+              statusFilter === s ? 'text-[#2f54c8] font-semibold' : 'text-gray-700 dark:text-gray-300')}>
             {s}
           </button>
         ))}
       </FilterDropdown>
 
-      {/* Sort */}
       <FilterDropdown icon={ArrowUpDown} label="Sort: Date Applied">
         {SORT_OPTIONS.map((s) => (
-          <button key={s} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-50">{s}</button>
+          <button key={s} className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">{s}</button>
         ))}
       </FilterDropdown>
 
-      {/* Date range */}
       <FilterDropdown icon={Calendar} label="Date Range">
         {DATE_OPTIONS.map((s) => (
-          <button key={s} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-50">{s}</button>
+          <button key={s} className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">{s}</button>
         ))}
       </FilterDropdown>
 
       {/* View toggle */}
-      <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
+      <div className="flex items-center border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
         <button className="flex items-center gap-1.5 px-3 py-2 bg-[#2f54c8] text-white text-sm font-medium">
           <Table2 size={15} /> Table
         </button>
-        <button className="flex items-center gap-1.5 px-3 py-2 text-gray-500 text-sm hover:bg-gray-50">
+        <button className="flex items-center gap-1.5 px-3 py-2 text-gray-500 dark:text-gray-400 text-sm hover:bg-gray-50 dark:hover:bg-gray-800">
           <LayoutGrid size={15} />
         </button>
       </div>

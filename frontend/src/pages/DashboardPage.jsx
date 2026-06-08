@@ -1,11 +1,19 @@
+import { useEffect } from 'react'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import DashboardHeader from '@/components/dashboard/DashboardHeader'
 import DashboardStatCards from '@/components/dashboard/DashboardStatCards'
 import ActivityChartCard from '@/components/dashboard/ActivityChartCard'
 import FollowUpCard from '@/components/dashboard/FollowUpCard'
 import RecentApplicationsTable from '@/components/dashboard/RecentApplicationsTable'
+import useAppStore from '@/store/appStore'
 
 export default function DashboardPage() {
+  const fetchApplications = useAppStore((s) => s.fetchApplications)
+
+  useEffect(() => {
+    fetchApplications()
+  }, [fetchApplications])
+
   return (
     <DashboardLayout>
       <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">

@@ -32,17 +32,17 @@ export default function AddApplicationModal({ onClose, onSave }) {
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between px-7 pt-7 pb-5 border-b border-gray-100">
-          <h2 className="text-xl font-bold text-gray-900">Add New Application</h2>
+        <div className="flex items-center justify-between px-7 pt-7 pb-5 border-b border-gray-100 dark:border-gray-800">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Add New Application</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-700 transition-colors">
             <X size={20} />
           </button>
         </div>
 
         {/* Steps */}
-        <div className="flex items-center gap-3 px-7 py-4 border-b border-gray-100">
+        <div className="flex items-center gap-3 px-7 py-4 border-b border-gray-100 dark:border-gray-800">
           {[{ n: 1, label: 'Job Details' }, { n: 2, label: 'Additional Info' }].map((s) => (
             <button
               key={s.n}
@@ -181,15 +181,15 @@ export default function AddApplicationModal({ onClose, onSave }) {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-7 py-5 border-t border-gray-100">
+        <div className="flex items-center justify-between px-7 py-5 border-t border-gray-100 dark:border-gray-800">
           <button onClick={onClose}
-            className="px-5 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+            className="px-5 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
             Cancel
           </button>
           <div className="flex gap-3">
             {step === 2 && (
               <button onClick={() => setStep(1)}
-                className="px-5 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                className="px-5 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                 Back
               </button>
             )}
@@ -211,12 +211,12 @@ export default function AddApplicationModal({ onClose, onSave }) {
   )
 }
 
-const inputCls = 'w-full h-10 px-3.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2f54c8]/20 focus:border-[#2f54c8] transition-all'
+const inputCls = 'w-full h-10 px-3.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-800 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2f54c8]/20 focus:border-[#2f54c8] transition-all'
 
 function Field({ label, children }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-sm font-semibold text-gray-800">{label}</label>
+      <label className="text-sm font-semibold text-gray-800 dark:text-gray-200">{label}</label>
       {children}
     </div>
   )

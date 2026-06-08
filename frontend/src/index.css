@@ -6,15 +6,21 @@
   * {
     box-sizing: border-box;
   }
+
   body {
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    @apply bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
 @layer utilities {
   .auth-gradient {
     background: linear-gradient(135deg, #e8ecf5 0%, #dde3f0 40%, #c8d0e8 100%);
+  }
+  .dark .auth-gradient {
+    background: linear-gradient(135deg, #1e2130 0%, #161824 50%, #0f1117 100%);
   }
 }
