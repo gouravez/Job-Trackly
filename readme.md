@@ -18,6 +18,119 @@ A full-stack job application tracker built for college students, recent graduate
 
 ---
 
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        Browser                              │
+│  React 18 + Vite · Tailwind CSS · Zustand · Axios          │
+│                                                             │
+│  Pages: Dashboard · Applications · Kanban · Analytics       │
+│         Sign In/Up · Settings · Auth Callback               │
+│                                                             │
+│  Stores: authStore · appStore · themeStore                  │
+│  Services: api.js (Axios + JWT interceptor)                 │
+└──────────────────────────┬──────────────────────────────────┘
+                           │ HTTPS / REST
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│                        Backend                              │
+│  Node.js · Express · Passport · Zod                        │
+│                                                             │
+│  Middleware: protect (JWT) · validate (Zod) · helmet+cors   │
+│                                                             │
+│  Routes:                                                    │
+│  POST /api/auth/send-otp      → otp.service → email.js     │
+│  POST /api/auth/signup        → auth.service (OTP verify)  │
+│  POST /api/auth/signin        → auth.service               │
+│  GET  /api/auth/google        → passport → Google          │
+│  GET  /api/auth/google/cb     → google.service → JWT       │
+│  GET  /api/auth/me            → auth.service               │
+│  GET/POST/PATCH/DELETE                                      │
+│       /api/applications       → application.service        │
+│  PUT  /api/users/me/password  → user.service               │
+│  PUT  /api/users/me/profile   → user.service               │
+└───────┬──────────────────────────┬──────────────────────────┘
+        │ mysql2 pool              │ nodemailer / passport
+        ▼                          ▼
+┌───────────────────┐   ┌──────────────────────────────────┐
+│  MySQL            │   │  Third-party services             │
+│  Job_Trackly DB   │   │                                  │
+│                   │   │  Google OAuth                    │
+│  users            │   │  accounts.google.com             │
+│  applications     │   │                                  │
+│  timeline_events  │   │  SMTP / Email                    │
+│  contacts         │   │  Gmail · Resend · etc.           │
+│  resumes          │   │                                  │
+│  email_otps       │   └──────────────────────────────────┘
+└───────────────────┘
+```
+
+### Request lifecycle (email/password sign in)
+
+```
+Browser → POST /api/auth/signin { email, password }
+       → validate middleware (Zod signinSchema)
+       → signinController
+       → auth.service.signin()
+           → pool.query SELECT user WHERE email
+           → bcrypt.compare(password, hash)
+           → signToken({ userId, email })
+       ← { success: true, data: { token, user } }
+Browser stores token in localStorage
+Zustand authStore.token set → ProtectedRoutes unlock
+```
+
+### Request lifecycle (Google OAuth)
+
+```
+Browser → GET /api/auth/google
+       → Passport redirects to accounts.google.com
+User approves Google consent screen
+Google → GET /api/auth/google/callback?code=...
+       → Passport exchanges code for profile
+       → google.service.googleAuth()
+           → pool.query SELECT user WHERE email
+           → INSERT if new user
+           → signToken({ userId, email })
+       → res.redirect to /auth/callback?token=...&user=...
+AuthCallbackPage reads params
+       → localStorage.setItem('token', token)
+       → authStore.setAuth({ token, user })
+       → navigate('/dashboard')
+```
+
+### Request lifecycle (OTP sign up)
+
+```
+Step 1 — Send OTP
+Browser → POST /api/auth/send-otp { email }
+       → otp.service.sendOtp()
+           → check email not already registered
+           → generate 6-digit OTP
+           → bcrypt.hash(otp, 8)
+           → INSERT INTO email_otps (upsert on resend)
+           → email.js sendOtpEmail() via nodemailer
+       ← { success: true }
+
+Step 2 — Verify & create account
+Browser → POST /api/auth/signup { ...form, otp }
+       → validate (Zod signupSchema — otp required)
+       → auth.service.signup()
+           → otp.service.verifyOtp(email, otp)
+               → fetch hash from email_otps
+               → check expiry (10 min)
+               → bcrypt.compare(otp, hash)
+           → bcrypt.hash(password, 12)
+           → INSERT INTO users
+           → DELETE FROM email_otps (cleanup)
+           → signToken({ userId, email })
+       ← { success: true, data: { token, user } }
+Browser stores token → redirects to /dashboard
+```
+
+---
+
 ## Tech Stack
 
 ### Frontend
