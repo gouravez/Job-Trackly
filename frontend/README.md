@@ -1,4 +1,4 @@
-# AppTrack — Frontend
+# Job Trackly — Frontend
 
 > Job application tracker built with React + Tailwind CSS.
 
@@ -12,7 +12,7 @@ npm run dev
 ## Directory Structure
 
 ```
-apptrack/
+Job Trackly/
 ├── public/                     # Static assets
 ├── src/
 │   ├── components/
@@ -56,6 +56,6 @@ apptrack/
 
 ## Environment Variables
 
-| Variable        | Default                      | Description         |
-|-----------------|------------------------------|---------------------|
-| `VITE_API_URL`  | `http://localhost:4000/api`  | Backend API base URL |
+| Variable       | Default                     | Description          |
+| -------------- | --------------------------- | -------------------- |
+| `VITE_API_URL` | `http://localhost:4000/api` | Backend API base URL |

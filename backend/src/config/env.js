@@ -13,6 +13,11 @@ const envSchema = z.object({
   CLIENT_URL:            z.string().url().default('http://localhost:5173'),
   GOOGLE_CLIENT_ID:      z.string().min(1),
   GOOGLE_CLIENT_SECRET:  z.string().min(1),
+  SMTP_HOST:     z.string().default('smtp.gmail.com'),
+  SMTP_PORT:     z.string().default('587'),
+  SMTP_USER:     z.string().min(1),
+  SMTP_PASS:     z.string().min(1),
+  SMTP_FROM:     z.string().default('Job Trackly <noreply@jobtrackly.com>'),
 })
 
 const parsed = envSchema.safeParse(process.env)

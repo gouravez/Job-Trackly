@@ -3,6 +3,7 @@ import { User, Palette, Shield, Sun, Moon, Monitor, Check, Eye, EyeOff } from 'l
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import useAuthStore from '@/store/authStore'
 import useThemeStore from '@/store/themeStore'
+import { userService } from '@/services/api'
 import { cn } from '@/lib/utils'
 
 // ── Shared primitives ────────────────────────────────────────────────────────
@@ -77,10 +78,14 @@ function ProfileSection() {
 
   const initials = `${form.firstName?.[0] || ''}${form.lastName?.[0] || ''}`.toUpperCase() || '?'
 
-  const handleSave = () => {
-    // TODO: wire to PUT /api/users/me
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+  const handleSave = async () => {
+    try {
+      await userService.updateProfile(form)
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+    } catch (err) {
+      console.error('Profile update failed:', err)
+    }
   }
 
   return (
@@ -190,15 +195,20 @@ function AccountSection() {
 
   const set = (k, v) => setPwd((p) => ({ ...p, [k]: v }))
 
-  const handlePasswordSave = () => {
+  const handlePasswordSave = async () => {
     setError('')
-    if (!pwd.current)                    return setError('Enter your current password.')
-    if (pwd.next.length < 8)             return setError('New password must be at least 8 characters.')
-    if (pwd.next !== pwd.confirm)        return setError('Passwords do not match.')
-    // TODO: wire to PUT /api/users/me/password
-    setSaved(true)
-    setPwd({ current: '', next: '', confirm: '' })
-    setTimeout(() => setSaved(false), 2000)
+    if (!pwd.current)             return setError('Enter your current password.')
+    if (pwd.next.length < 8)      return setError('New password must be at least 8 characters.')
+    if (pwd.next !== pwd.confirm) return setError('Passwords do not match.')
+
+    try {
+      await userService.changePassword({ currentPassword: pwd.current, newPassword: pwd.next })
+      setSaved(true)
+      setPwd({ current: '', next: '', confirm: '' })
+      setTimeout(() => setSaved(false), 2000)
+    } catch (err) {
+      setError(err?.response?.data?.message || 'Failed to change password.')
+    }
   }
 
   return (

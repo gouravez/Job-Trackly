@@ -1,58 +1,62 @@
-import { useState } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react'
-import AuthLayout from '@/components/layout/AuthLayout.jsx'
-import SocialAuthButtons from '@/components/auth/SocialAuthButtons.jsx'
-import Button from '@/components/ui/Button.jsx'
-import Input from '@/components/ui/Input.jsx'
-import Logo from '@/components/ui/Logo.jsx'
-import useAuthStore from '@/store/authStore'
+import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Mail, Lock, Eye, EyeOff, LogIn } from "lucide-react";
+import AuthLayout from "@/components/layout/AuthLayout.jsx";
+import SocialAuthButtons from "@/components/auth/SocialAuthButtons.jsx";
+import Button from "@/components/ui/Button.jsx";
+import Input from "@/components/ui/Input.jsx";
+import Logo from "@/components/ui/Logo.jsx";
+import useAuthStore from "@/store/authStore";
 
 const FEATURES = [
-  'Track every application in one place',
-  'Visualize your pipeline with Kanban',
-  'Never miss a follow-up or deadline',
-]
+  "Track every application in one place",
+  "Visualize your pipeline with Kanban",
+  "Never miss a follow-up or deadline",
+];
 
 export default function SignInPage() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const from = location.state?.from?.pathname || '/dashboard'
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/dashboard";
 
-  const { signIn, isLoading } = useAuthStore()
+  const { signIn, isLoading } = useAuthStore();
 
-  const [showPassword, setShowPassword] = useState(false)
-  const [rememberMe, setRememberMe]     = useState(false)
-  const [form, setForm]                 = useState({ email: '', password: '' })
-  const [errors, setErrors]             = useState({})
-  const [authError, setAuthError]       = useState('')
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
+  const [authError, setAuthError] = useState("");
 
   const handleChange = (e) => {
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
-    setErrors((err) => ({ ...err, [e.target.name]: '' }))
-    setAuthError('')
-  }
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+    setErrors((err) => ({ ...err, [e.target.name]: "" }));
+    setAuthError("");
+  };
 
   const validate = () => {
-    const newErrors = {}
-    if (!form.email.trim()) newErrors.email = 'Required'
-    else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = 'Enter a valid email'
-    if (!form.password) newErrors.password = 'Required'
-    return newErrors
-  }
+    const newErrors = {};
+    if (!form.email.trim()) newErrors.email = "Required";
+    else if (!/\S+@\S+\.\S+/.test(form.email))
+      newErrors.email = "Enter a valid email";
+    if (!form.password) newErrors.password = "Required";
+    return newErrors;
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    const errs = validate()
-    if (Object.keys(errs).length) { setErrors(errs); return }
-
-    const result = await signIn(form)
-    if (result.success) {
-      navigate(from, { replace: true })
-    } else {
-      setAuthError(result.error)
+    e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
     }
-  }
+
+    const result = await signIn(form);
+    if (result.success) {
+      navigate(from, { replace: true });
+    } else {
+      setAuthError(result.error);
+    }
+  };
 
   return (
     <AuthLayout
@@ -64,8 +68,12 @@ export default function SignInPage() {
         <div className="space-y-1">
           <Logo size="lg" />
           <div className="pt-3">
-            <h2 className="text-2xl font-bold text-gray-900">Sign in to AppTrack</h2>
-            <p className="text-sm text-gray-500 mt-1">Continue with your account below</p>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Sign in to Job Trackly
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Continue with your account below
+            </p>
           </div>
         </div>
 
@@ -92,7 +100,7 @@ export default function SignInPage() {
           <Input
             label="Password"
             name="password"
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             placeholder="••••••••"
             icon={Lock}
             rightIcon={showPassword ? EyeOff : Eye}
@@ -112,22 +120,35 @@ export default function SignInPage() {
               />
               <span className="text-sm text-gray-600">Remember me</span>
             </label>
-            <Link to="/forgot-password" className="text-sm text-[#2f54c8] font-medium hover:underline">
+            <Link
+              to="/forgot-password"
+              className="text-sm text-[#2f54c8] font-medium hover:underline"
+            >
               Forgot password?
             </Link>
           </div>
 
-          <Button type="submit" size="lg" className="w-full" loading={isLoading}>
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            loading={isLoading}
+          >
             <LogIn size={16} />
             Sign In
           </Button>
         </form>
 
         <p className="text-center text-sm text-gray-500">
-          Don&apos;t have an account?{' '}
-          <Link to="/signup" className="text-[#2f54c8] font-semibold hover:underline">Sign up</Link>
+          Don&apos;t have an account?{" "}
+          <Link
+            to="/signup"
+            className="text-[#2f54c8] font-semibold hover:underline"
+          >
+            Sign up
+          </Link>
         </p>
       </div>
     </AuthLayout>
-  )
+  );
 }

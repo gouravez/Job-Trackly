@@ -97,7 +97,17 @@ CREATE TABLE IF NOT EXISTS contacts (
   INDEX idx_contacts_app_id (application_id)
 );
 
--- ── Resumes ────────────────────────────────────────────────────────────────────
+-- ── Email OTP (signup verification) ───────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS email_otps (
+  id         INT UNSIGNED  AUTO_INCREMENT PRIMARY KEY,
+  email      VARCHAR(255)  NOT NULL UNIQUE,
+  otp_hash   VARCHAR(255)  NOT NULL,
+  expires_at TIMESTAMP     NOT NULL,
+  created_at TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  INDEX idx_otp_expires (expires_at)
+);
+
 CREATE TABLE IF NOT EXISTS resumes (
   id             INT UNSIGNED  AUTO_INCREMENT PRIMARY KEY,
   user_id        INT UNSIGNED  NOT NULL,

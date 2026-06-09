@@ -20,10 +20,11 @@ api.interceptors.request.use((config) => {
 // Auth endpoints
 // ---------------------------------------------------------------------------
 export const authService = {
-  signUp: (data)   => api.post('/auth/signup', data),
-  signIn: (data)   => api.post('/auth/signin', data),
-  signOut: ()      => api.post('/auth/signout'),
-  me: ()           => api.get('/auth/me'),
+  sendOtp:  (data) => api.post('/auth/send-otp', data),
+  signUp:   (data) => api.post('/auth/signup', data),
+  signIn:   (data) => api.post('/auth/signin', data),
+  signOut:  ()     => api.post('/auth/signout'),
+  me:       ()     => api.get('/auth/me'),
 }
 
 // ---------------------------------------------------------------------------
@@ -36,6 +37,14 @@ export const applicationService = {
   create:   (data)       => api.post('/applications', data),
   update:   (id, data)   => api.patch(`/applications/${id}`, data),
   remove:   (id)         => api.delete(`/applications/${id}`),
+}
+
+// ---------------------------------------------------------------------------
+// User endpoints
+// ---------------------------------------------------------------------------
+export const userService = {
+  changePassword: (data) => api.put('/users/me/password', data),
+  updateProfile:  (data) => api.put('/users/me/profile',  data),
 }
 
 export default api

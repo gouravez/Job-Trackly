@@ -7,6 +7,7 @@ import { ENV } from './config/env.js'
 import authRoutes        from './routes/auth.routes.js'
 import googleRoutes      from './routes/google.routes.js'
 import applicationRoutes from './routes/application.routes.js'
+import userRoutes        from './routes/user.routes.js'
 import { errorHandler } from './middleware/error.middleware.js'
 
 const app = express()
@@ -28,6 +29,7 @@ app.get('/health', (_req, res) => {
 app.use('/api/auth',         authRoutes)
 app.use('/api/auth',         googleRoutes)
 app.use('/api/applications', applicationRoutes)
+app.use('/api/users/me',     userRoutes)
 
 // 404
 app.use((_req, res) => {
