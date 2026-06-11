@@ -12,6 +12,7 @@ import ApplicationDetailPage  from '@/pages/ApplicationDetailPage.jsx'
 import KanbanPage             from '@/pages/KanbanPage.jsx'
 import AnalyticsPage          from '@/pages/AnalyticsPage.jsx'
 import SettingsPage           from '@/pages/SettingsPage.jsx'
+import CalendarPage from '@/pages/CalendarPage.jsx'
 
 const Protected = ({ children }) => <ProtectedRoute>{children}</ProtectedRoute>
 
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/kanban"           element={<Protected><KanbanPage /></Protected>} />
         <Route path="/analytics"        element={<Protected><AnalyticsPage /></Protected>} />
         <Route path="/settings"         element={<Protected><SettingsPage /></Protected>} />
+        <Route path="/calendar" element={<Protected><CalendarPage /></Protected>} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

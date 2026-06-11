@@ -13,12 +13,12 @@ export default function AuthCallbackPage() {
     const token  = params.get('token')
     const user   = params.get('user')
 
-    console.log('raw search:', raw)
-    console.log('token:', token ? 'present' : 'missing')
-    console.log('user:', user)
+    // console.log('raw search:', raw)
+    // console.log('token:', token ? 'present' : 'missing')
+    // console.log('user:', user)
 
     if (!token || !user) {
-      console.error('Missing token or user')
+      // console.error('Missing token or user')
       navigate('/signin?error=google', { replace: true })
       return
     }
@@ -26,7 +26,7 @@ export default function AuthCallbackPage() {
     try {
       const padded = user + '=='.slice(0, (4 - (user.length % 4)) % 4)
       const parsed = JSON.parse(atob(padded))
-      console.log('parsed user:', parsed)
+      // console.log('parsed user:', parsed)
       localStorage.setItem('token', token)
       setAuth({ token, user: parsed })
       navigate('/dashboard', { replace: true })

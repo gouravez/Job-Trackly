@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Plus } from 'lucide-react'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import ApplicationsFilters from '@/components/applications/ApplicationsFilters'
@@ -10,19 +10,25 @@ import useAppStore from '@/store/appStore'
 const ROWS_PER_PAGE = 8
 
 export default function ApplicationsPage() {
-  const { applications, addApplication, deleteApplication } = useAppStore()
+  const { applications, fetchApplications, addApplication, deleteApplication, isLoading } = useAppStore()
 
   const [search, setSearch]             = useState('')
   const [statusFilter, setStatusFilter] = useState('All')
   const [showModal, setShowModal]       = useState(false)
   const [page, setPage]                 = useState(1)
+  const [saveError, setSaveError]       = useState('')
+
+  // Fetch on mount — only if store is empty to avoid redundant calls
+  useEffect(() => {
+    if (applications.length === 0) fetchApplications()
+  }, [])
 
   const filtered = applications.filter((a) => {
     const q = search.toLowerCase()
     const matchesSearch =
-      a.company.toLowerCase().includes(q) ||
-      a.role.toLowerCase().includes(q) ||
-      a.location.toLowerCase().includes(q)
+      (a.company || '').toLowerCase().includes(q) ||
+      (a.role    || '').toLowerCase().includes(q) ||
+      (a.location|| '').toLowerCase().includes(q)
     const matchesStatus = statusFilter === 'All' || a.status === statusFilter
     return matchesSearch && matchesStatus
   })
@@ -30,16 +36,22 @@ export default function ApplicationsPage() {
   const totalPages = Math.ceil(filtered.length / ROWS_PER_PAGE)
   const paginated  = filtered.slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE)
 
-  const handleSearch = (val) => { setSearch(val); setPage(1) }
-  const handleStatusFilter = (val) => { setStatusFilter(val); setPage(1) }
+  const handleSearch      = (val) => { setSearch(val); setPage(1) }
+  const handleStatusFilter= (val) => { setStatusFilter(val); setPage(1) }
 
-  const handleSave = (form) => {
-    addApplication({
-      ...form,
-      id: Date.now(),
-      company: form.company || 'New Company',
-      role: form.role || 'Unknown Role',
-    })
+  // addApplication now calls the real API — no fake id needed
+  const handleSave = async (form) => {
+    setSaveError('')
+    const result = await addApplication(form)
+    if (result?.success === false) {
+      setSaveError(result.error || 'Failed to add application')
+      return
+    }
+    setShowModal(false)
+  }
+
+  const handleDelete = async (id) => {
+    await deleteApplication(id)
   }
 
   return (
@@ -49,12 +61,16 @@ export default function ApplicationsPage() {
         {/* Header */}
         <div className="flex items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">My Applications</h1>
-            <p className="text-gray-400 mt-0.5 text-sm">{filtered.length} Applications</p>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">
+              My Applications
+            </h1>
+            <p className="text-gray-400 dark:text-gray-500 mt-0.5 text-sm">
+              {isLoading ? 'Loading…' : `${filtered.length} Applications`}
+            </p>
           </div>
           <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 bg-gray-900 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors whitespace-nowrap"
+            onClick={() => { setSaveError(''); setShowModal(true) }}
+            className="flex items-center gap-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors whitespace-nowrap"
           >
             <Plus size={16} />
             <span className="hidden sm:inline">Add Application</span>
@@ -70,21 +86,38 @@ export default function ApplicationsPage() {
           onStatusFilter={handleStatusFilter}
         />
 
-        {/* Table + Pagination */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <ApplicationsTable applications={paginated} onDelete={deleteApplication} />
-          <ApplicationsPagination
-            page={page}
-            totalPages={totalPages}
-            filtered={filtered}
-            ROWS_PER_PAGE={ROWS_PER_PAGE}
-            setPage={setPage}
-          />
-        </div>
+        {/* Loading skeleton */}
+        {isLoading && applications.length === 0 ? (
+          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-12 text-center">
+            <div className="w-8 h-8 border-[3px] border-[#2f54c8] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+            <p className="text-sm text-gray-400">Loading applications…</p>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-12 text-center">
+            <p className="text-gray-400 text-sm">
+              {search || statusFilter !== 'All' ? 'No applications match your filters.' : 'No applications yet — add your first one!'}
+            </p>
+          </div>
+        ) : (
+          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
+            <ApplicationsTable applications={paginated} onDelete={handleDelete} />
+            <ApplicationsPagination
+              page={page}
+              totalPages={totalPages}
+              filtered={filtered}
+              ROWS_PER_PAGE={ROWS_PER_PAGE}
+              setPage={setPage}
+            />
+          </div>
+        )}
       </div>
 
       {showModal && (
-        <AddApplicationModal onClose={() => setShowModal(false)} onSave={handleSave} />
+        <AddApplicationModal
+          onClose={() => setShowModal(false)}
+          onSave={handleSave}
+          saveError={saveError}
+        />
       )}
     </DashboardLayout>
   )

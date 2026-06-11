@@ -11,9 +11,15 @@
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    @apply bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100;
+    @apply bg-white text-gray-900 dark:bg-[#0d0f14] dark:text-[#e8eaf2];
     transition: background-color 0.2s ease, color 0.2s ease;
   }
+
+  /* Scrollbar — premium thin style in dark mode */
+  .dark ::-webkit-scrollbar { width: 5px; height: 5px; }
+  .dark ::-webkit-scrollbar-track { background: transparent; }
+  .dark ::-webkit-scrollbar-thumb { background: #252a3a; border-radius: 99px; }
+  .dark ::-webkit-scrollbar-thumb:hover { background: #2e3448; }
 }
 
 @layer utilities {
@@ -21,6 +27,19 @@
     background: linear-gradient(135deg, #e8ecf5 0%, #dde3f0 40%, #c8d0e8 100%);
   }
   .dark .auth-gradient {
-    background: linear-gradient(135deg, #1e2130 0%, #161824 50%, #0f1117 100%);
+    background: linear-gradient(135deg, #13161e 0%, #0f1219 50%, #0d0f14 100%);
+  }
+
+  /* Glass card — used for elevated surfaces */
+  .dark .glass-card {
+    background: rgba(19, 22, 30, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(37, 42, 58, 0.8);
+  }
+
+  /* Subtle brand glow on focus in dark mode */
+  .dark .brand-glow:focus {
+    box-shadow: 0 0 0 3px rgba(61, 102, 232, 0.18);
   }
 }

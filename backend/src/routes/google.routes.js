@@ -9,8 +9,8 @@ const router = Router()
 // ---------------------------------------------------------------------------
 // Configure Passport Google Strategy
 // ---------------------------------------------------------------------------
-const CALLBACK_URL = 'http://localhost:4000/api/auth/google/callback'
-console.log('Google OAuth callbackURL:', CALLBACK_URL)
+const CALLBACK_URL = `${ENV.API_URL || 'http://localhost:4000'}/api/auth/google/callback`
+// console.log('Google OAuth callbackURL:', CALLBACK_URL)
 
 passport.use(
   new GoogleStrategy(
@@ -55,20 +55,20 @@ router.get(
   '/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: `${ENV.CLIENT_URL}/signin?error=google` }),
   (req, res) => {
-    console.log('Google callback req.user:', req.user)
+    // console.log('Google callback req.user:', req.user)
 
     if (!req.user) {
-      console.log('No req.user — passport failed silently')
+      // console.log('No req.user — passport failed silently')
       return res.redirect(`${ENV.CLIENT_URL}/signin?error=google`)
     }
 
     const { token, user } = req.user
-    console.log('Token:', token ? 'present' : 'missing')
-    console.log('User:', user)
+    // console.log('Token:', token ? 'present' : 'missing')
+    // console.log('User:', user)
 
     const userB64 = Buffer.from(JSON.stringify(user)).toString('base64').replace(/=/g, '')
     const url = `${ENV.CLIENT_URL}/auth/callback?token=${token}&user=${userB64}`
-    console.log('Redirecting to:', url)
+    // console.log('Redirecting to:', url)
     res.redirect(url)
   }
 )

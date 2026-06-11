@@ -9,7 +9,7 @@ export function validate(schema) {
   return (req, _res, next) => {
     const result = schema.safeParse(req.body)
     if (!result.success) {
-      const message = result.error.errors
+      const message = result.error.issues
         .map((e) => `${e.path.join('.')}: ${e.message}`)
         .join(', ')
       return next(new AppError(message, 422))

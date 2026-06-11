@@ -23,7 +23,7 @@ A full-stack job application tracker built for college students, recent graduate
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                        Browser                              │
-│  React 18 + Vite · Tailwind CSS · Zustand · Axios          │
+│  React 18 + Vite · Tailwind CSS · Zustand · Axios           │
 │                                                             │
 │  Pages: Dashboard · Applications · Kanban · Analytics       │
 │         Sign In/Up · Settings · Auth Callback               │
@@ -35,26 +35,26 @@ A full-stack job application tracker built for college students, recent graduate
                            ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                        Backend                              │
-│  Node.js · Express · Passport · Zod                        │
+│  Node.js · Express · Passport · Zod                         │
 │                                                             │
 │  Middleware: protect (JWT) · validate (Zod) · helmet+cors   │
 │                                                             │
 │  Routes:                                                    │
-│  POST /api/auth/send-otp      → otp.service → email.js     │
-│  POST /api/auth/signup        → auth.service (OTP verify)  │
-│  POST /api/auth/signin        → auth.service               │
-│  GET  /api/auth/google        → passport → Google          │
-│  GET  /api/auth/google/cb     → google.service → JWT       │
-│  GET  /api/auth/me            → auth.service               │
+│  POST /api/auth/send-otp      → otp.service → email.js      │
+│  POST /api/auth/signup        → auth.service (OTP verify)   │
+│  POST /api/auth/signin        → auth.service                │
+│  GET  /api/auth/google        → passport → Google           │
+│  GET  /api/auth/google/cb     → google.service → JWT        │
+│  GET  /api/auth/me            → auth.service                │
 │  GET/POST/PATCH/DELETE                                      │
-│       /api/applications       → application.service        │
-│  PUT  /api/users/me/password  → user.service               │
-│  PUT  /api/users/me/profile   → user.service               │
+│       /api/applications       → application.service         │
+│  PUT  /api/users/me/password  → user.service                │
+│  PUT  /api/users/me/profile   → user.service                │
 └───────┬──────────────────────────┬──────────────────────────┘
         │ mysql2 pool              │ nodemailer / passport
         ▼                          ▼
 ┌───────────────────┐   ┌──────────────────────────────────┐
-│  MySQL            │   │  Third-party services             │
+│  MySQL            │   │  Third-party services            │
 │  Job_Trackly DB   │   │                                  │
 │                   │   │  Google OAuth                    │
 │  users            │   │  accounts.google.com             │

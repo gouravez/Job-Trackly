@@ -1,3 +1,4 @@
+// backend/src/app.js
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
@@ -8,6 +9,8 @@ import authRoutes        from './routes/auth.routes.js'
 import googleRoutes      from './routes/google.routes.js'
 import applicationRoutes from './routes/application.routes.js'
 import userRoutes        from './routes/user.routes.js'
+import reminderRoutes    from './routes/reminder.routes.js' 
+import calendarRoutes from './routes/calendar.routes.js' 
 import { errorHandler } from './middleware/error.middleware.js'
 
 const app = express()
@@ -30,6 +33,8 @@ app.use('/api/auth',         authRoutes)
 app.use('/api/auth',         googleRoutes)
 app.use('/api/applications', applicationRoutes)
 app.use('/api/users/me',     userRoutes)
+app.use('/api/reminders',    reminderRoutes)   
+app.use('/api/calendar', calendarRoutes) 
 
 // 404
 app.use((_req, res) => {

@@ -2,12 +2,12 @@ import { STATUS_COLORS } from '@/lib/mockData'
 import { cn } from '@/lib/utils'
 
 const DARK_COLORS = {
-  Saved:      'dark:bg-gray-800 dark:text-gray-300',
-  Applied:    'dark:bg-blue-900/40 dark:text-blue-300',
-  Assessment: 'dark:bg-purple-900/40 dark:text-purple-300',
-  Interview:  'dark:bg-teal-900/40 dark:text-teal-300',
-  Offer:      'dark:bg-green-900/40 dark:text-green-300',
-  Rejected:   'dark:bg-red-900/40 dark:text-red-300',
+  Saved:      'dark:bg-[#1a1e2a] dark:text-[#8b91a8]',
+  Applied:    'dark:bg-[#0f1a35] dark:text-[#6b8ef5]',
+  Assessment: 'dark:bg-[#1a1030] dark:text-purple-400',
+  Interview:  'dark:bg-[#0a2020] dark:text-teal-400',
+  Offer:      'dark:bg-[#0a2015] dark:text-emerald-400',
+  Rejected:   'dark:bg-[#2a0f11] dark:text-red-400',
 }
 
 export default function StatusBadge({ status, size = 'md' }) {
