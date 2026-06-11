@@ -17,7 +17,21 @@ const app = express()
 
 // ── Security & utility middleware ──────────────────────────────────────────
 app.use(helmet())
-app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }))
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    if (!origin) return callback(null, true)
+    // Allow the frontend and any Chrome extension
+    if (
+      origin === ENV.CLIENT_URL ||
+      /^chrome-extension:\/\//.test(origin)
+    ) {
+      return callback(null, true)
+    }
+    callback(new Error('Not allowed by CORS'))
+  },
+  credentials: true,
+}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(morgan(ENV.NODE_ENV === 'development' ? 'dev' : 'combined'))

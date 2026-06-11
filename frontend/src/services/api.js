@@ -25,7 +25,9 @@ export const authService = {
   signUp:   (data) => api.post('/auth/signup',   data),
   signIn:   (data) => api.post('/auth/signin',   data),
   signOut:  ()     => api.post('/auth/signout'),
-  me:       ()     => api.get('/auth/me'),
+  me:             ()     => api.get('/auth/me'),
+  forgotPassword: (data) => api.post('/auth/forgot-password', data),
+  resetPassword:  (data) => api.post('/auth/reset-password',  data),
 }
 
 // ---------------------------------------------------------------------------

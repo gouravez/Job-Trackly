@@ -4,6 +4,7 @@ import useAuthStore from '@/store/authStore'
 import ProtectedRoute, { GuestRoute } from '@/components/common/ProtectedRoute'
 import LandingPage            from '@/pages/LandingPage.jsx'
 import SignUpPage             from '@/pages/SignUpPage.jsx'
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage.jsx";
 import SignInPage             from '@/pages/SignInPage.jsx'
 import AuthCallbackPage       from '@/pages/AuthCallbackPage.jsx'
 import DashboardPage          from '@/pages/DashboardPage.jsx'
@@ -29,6 +30,7 @@ export default function App() {
         {/* Public */}
         <Route path="/"              element={<LandingPage />} />
         <Route path="/signup"        element={<GuestRoute><SignUpPage /></GuestRoute>} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/signin"        element={<GuestRoute><SignInPage /></GuestRoute>} />
         <Route path="/auth/callback" element={<AuthCallbackPage />} />
 

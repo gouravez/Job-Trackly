@@ -1,13 +1,15 @@
 import { Router } from 'express'
 import { validate }  from '../middleware/validate.middleware.js'
 import { protect }   from '../middleware/auth.middleware.js'
-import { signupSchema, signinSchema } from '../schemas/auth.schema.js'
+import { signupSchema, signinSchema, forgotPasswordSchema, resetPasswordSchema } from '../schemas/auth.schema.js'
 import { z } from 'zod'
 import {
   signupController,
   signinController,
   getMeController,
   signoutController,
+  forgotPasswordController,
+  resetPasswordController,
 } from '../controllers/auth.controller.js'
 import { sendOtp } from '../services/otp.service.js'
 
@@ -30,5 +32,9 @@ router.post('/signout', signoutController)
 
 // Protected
 router.get('/me', protect, getMeController)
+
+// ── Password reset ────────────────────────────────────────────────────────────
+router.post('/forgot-password', validate(forgotPasswordSchema), forgotPasswordController)
+router.post('/reset-password',  validate(resetPasswordSchema),  resetPasswordController)
 
 export default router

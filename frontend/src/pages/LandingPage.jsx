@@ -220,7 +220,7 @@ export default function LandingPage() {
       {/* ── Features ──────────────────────────────────────────────── */}
       <section id="features" className="max-w-5xl mx-auto px-6 py-24">
         <div className="text-center mb-16">
-          <p className="text-sm font-semibold text-[#2f54c8] mb-3 tracking-widest uppercase">
+          <p className="text-sm font-semibold text-dark-accent mb-3 tracking-widest uppercase">
             Everything in one place
           </p>
           <h2 className="text-4xl font-extrabold text-gray-900 mb-4">

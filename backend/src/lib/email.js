@@ -145,3 +145,28 @@ export async function sendFollowUpReminderEmail(email, firstName, apps) {
     `,
   })
 }
+
+export async function sendPasswordResetEmail(email, otp) {
+  await transporter.sendMail({
+    from:    ENV.SMTP_FROM,
+    to:      email,
+    subject: 'Reset your Job Trackly password',
+    html: `
+      <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#f9fafb;border-radius:12px;">
+        <h2 style="margin:0 0 8px;font-size:22px;color:#111827;">Reset your password</h2>
+        <p style="margin:0 0 24px;color:#6b7280;font-size:15px;">
+          Use the code below to reset your Job Trackly password.
+          It expires in <strong>10 minutes</strong>.
+        </p>
+        <div style="background:#fff;border:2px solid #dc2626;border-radius:12px;padding:24px;text-align:center;margin-bottom:24px;">
+          <span style="font-size:40px;font-weight:800;letter-spacing:12px;color:#dc2626;">${otp}</span>
+        </div>
+        <p style="margin:0 0 12px;color:#6b7280;font-size:14px;">
+          If you didn't request a password reset, you can safely ignore this email.
+          Your password will not be changed.
+        </p>
+        <p style="margin:0;color:#9ca3af;font-size:13px;">— The Job Trackly Team</p>
+      </div>
+    `,
+  })
+}

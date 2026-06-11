@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import pool from '../lib/db.js'
-import { sendOtpEmail } from '../lib/email.js'
+import { sendOtpEmail, sendPasswordResetEmail } from '../lib/email.js'
 import { AppError } from '../middleware/error.middleware.js'
 
 // Generate a random 6-digit OTP
@@ -65,4 +65,28 @@ export async function verifyOtp(email, otp) {
 // ---------------------------------------------------------------------------
 export async function cleanupOtp(email) {
   await pool.query('DELETE FROM email_otps WHERE email = ?', [email])
+}
+// ---------------------------------------------------------------------------
+// sendPasswordResetOtp — like sendOtp but requires the account to EXIST.
+// ---------------------------------------------------------------------------
+export async function sendPasswordResetOtp(email) {
+  const [existing] = await pool.query(
+    'SELECT id FROM users WHERE email = ?', [email]
+  )
+  // Return generic message either way to avoid user enumeration
+  if (existing.length === 0) return { message: 'If that email exists, a reset code was sent.' }
+
+  const otp     = generateOtp()
+  const hash    = await bcrypt.hash(otp, 8)
+  const expires = new Date(Date.now() + 10 * 60 * 1000)  // 10 minutes
+
+  await pool.query(
+    `INSERT INTO email_otps (email, otp_hash, expires_at)
+     VALUES (?, ?, ?)
+     ON DUPLICATE KEY UPDATE otp_hash = VALUES(otp_hash), expires_at = VALUES(expires_at), created_at = NOW()`,
+    [email, hash, expires]
+  )
+
+  await sendPasswordResetEmail(email, otp)
+  return { message: 'If that email exists, a reset code was sent.' }
 }

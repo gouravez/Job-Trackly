@@ -36,3 +36,21 @@ export async function signoutController(_req, res) {
   // If you add a token blacklist later, handle it here.
   res.json({ success: true, message: 'Signed out successfully' })
 }
+
+export async function forgotPasswordController(req, res, next) {
+  try {
+    const result = await authService.sendPasswordResetOtp(req.body.email)
+    res.json({ success: true, ...result })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export async function resetPasswordController(req, res, next) {
+  try {
+    const result = await authService.resetPassword(req.body)
+    res.json({ success: true, ...result })
+  } catch (err) {
+    next(err)
+  }
+}

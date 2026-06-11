@@ -12,7 +12,7 @@ export default function Logo({ size = "md", className }) {
   return (
     <div className={cn("flex items-center gap-2.5", className)}>
       <div
-        className={cn("flex items-center justify-center bg-[#2f54c8]", s.box)}
+        className={cn("flex items-center justify-center bg-dark-accent", s.box)}
       >
         <Briefcase size={s.icon} color="white" strokeWidth={2} />
       </div>

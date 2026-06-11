@@ -68,10 +68,10 @@ export default function SignInPage() {
         <div className="space-y-1">
           <Logo size="lg" />
           <div className="pt-3">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-dark-tx1">
               Sign in to Job Trackly
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-sm text-gray-500 dark:text-dark-tx2 mt-1">
               Continue with your account below
             </p>
           </div>
@@ -116,13 +116,15 @@ export default function SignInPage() {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="h-4 w-4 rounded border-gray-300 accent-[#2f54c8] cursor-pointer"
+                className="h-4 w-4 rounded border-gray-300 accent-dark-accent cursor-pointer"
               />
-              <span className="text-sm text-gray-600 dark:text-gray-300">Remember me</span>
+              <span className="text-sm text-gray-600 dark:text-gray-300">
+                Remember me
+              </span>
             </label>
             <Link
               to="/forgot-password"
-              className="text-sm text-[#2f54c8] font-medium hover:underline"
+              className="text-sm text-dark-accent font-medium hover:underline"
             >
               Forgot password?
             </Link>
@@ -143,7 +145,7 @@ export default function SignInPage() {
           Don&apos;t have an account?{" "}
           <Link
             to="/signup"
-            className="text-[#2f54c8] font-semibold hover:underline"
+            className="text-dark-accent font-semibold hover:underline"
           >
             Sign up
           </Link>

@@ -1,6 +1,6 @@
-import { Check } from 'lucide-react'
-import Logo from '@/components/ui/Logo.jsx'
-import AvatarStack from '@/components/ui/AvatarStack.jsx'
+import { Check } from "lucide-react";
+import Logo from "@/components/ui/Logo.jsx";
+import AvatarStack from "@/components/ui/AvatarStack.jsx";
 
 export default function AuthLayout({ children, headline, subline, features }) {
   return (
@@ -9,7 +9,8 @@ export default function AuthLayout({ children, headline, subline, features }) {
       <div
         className="hidden lg:flex lg:w-[45%] xl:w-[40%] flex-col justify-between p-10 xl:p-14"
         style={{
-          background: 'linear-gradient(145deg, #e8ecf5 0%, #d8e0ef 50%, #c4cfea 100%)',
+          background:
+            "linear-gradient(145deg, #e8ecf5 0%, #d8e0ef 50%, #c4cfea 100%)",
         }}
       >
         <Logo size="md" />
@@ -20,7 +21,9 @@ export default function AuthLayout({ children, headline, subline, features }) {
               {headline}
             </h1>
             {subline && (
-              <p className="text-gray-600 text-base leading-relaxed max-w-sm">{subline}</p>
+              <p className="text-gray-600 text-base leading-relaxed max-w-sm">
+                {subline}
+              </p>
             )}
           </div>
 
@@ -28,7 +31,7 @@ export default function AuthLayout({ children, headline, subline, features }) {
             <ul className="space-y-3">
               {features.map((f, i) => (
                 <li key={i} className="flex items-center gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#2f54c8] flex items-center justify-center">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-dark-accent flex items-center justify-center">
                     <Check size={11} color="white" strokeWidth={3} />
                   </span>
                   <span className="text-gray-700 text-sm">{f}</span>
@@ -46,5 +49,5 @@ export default function AuthLayout({ children, headline, subline, features }) {
         {children}
       </div>
     </div>
-  )
+  );
 }

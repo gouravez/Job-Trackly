@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Trackly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Login view ─────────────────────────────────────────────────── -->
+    <div id="view-login" class="view">
+      <div class="header">
+        <div class="logo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+            <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 12v4M10 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Job Trackly
+        </div>
+      </div>
+      <div class="login-body">
+        <p class="login-desc">Sign in to save jobs directly from any listing page.</p>
+        <div class="field">
+          <label>Email</label>
+          <input id="login-email" type="email" placeholder="you@example.com" />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input id="login-password" type="password" placeholder="••••••••" />
+        </div>
+        <div id="login-error" class="error hidden"></div>
+        <button id="btn-login" class="btn-primary">Sign In</button>
+      </div>
+    </div>
+
+    <!-- ── Main / save view ───────────────────────────────────────────── -->
+    <div id="view-main" class="view hidden">
+      <div class="header">
+        <div class="logo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+            <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 12v4M10 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Job Trackly
+        </div>
+        <button id="btn-logout" class="btn-ghost" title="Sign out">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Not on a job page -->
+      <div id="not-job-page" class="hidden">
+        <div class="empty-state">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <p>Navigate to a job listing on LinkedIn, Indeed, Naukri, Internshala, Glassdoor, or Wellfound to save it.</p>
+        </div>
+      </div>
+
+      <!-- Job form -->
+      <div id="job-form-wrap">
+        <div id="detected-badge" class="detected-badge hidden">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+          Job detected
+        </div>
+
+        <div class="field">
+          <label>Company <span class="required">*</span></label>
+          <input id="f-company" type="text" placeholder="e.g. Google" />
+        </div>
+        <div class="field">
+          <label>Role <span class="required">*</span></label>
+          <input id="f-role" type="text" placeholder="e.g. Software Engineer" />
+        </div>
+        <div class="field">
+          <label>Location</label>
+          <input id="f-location" type="text" placeholder="e.g. Bangalore, India" />
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Status</label>
+            <select id="f-status">
+              <option value="Saved">Saved</option>
+              <option value="Applied">Applied</option>
+              <option value="Assessment">Assessment</option>
+              <option value="Interview">Interview</option>
+              <option value="Offer">Offer</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Priority</label>
+            <select id="f-priority">
+              <option value="Low">Low</option>
+              <option value="Medium" selected>Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Job Type</label>
+          <select id="f-jobtype">
+            <option value="">— Select —</option>
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+            <option value="Internship">Internship</option>
+            <option value="Contract">Contract</option>
+            <option value="Freelance">Freelance</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <textarea id="f-notes" rows="2" placeholder="Any notes…"></textarea>
+        </div>
+
+        <div id="form-error" class="error hidden"></div>
+        <div id="form-success" class="success hidden"></div>
+
+        <button id="btn-save" class="btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Save to Job Trackly
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

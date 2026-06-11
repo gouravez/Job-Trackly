@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 import pool from '../lib/db.js'
 import { signToken } from '../lib/jwt.js'
 import { AppError } from '../middleware/error.middleware.js'
-import { verifyOtp, cleanupOtp } from './otp.service.js'
+import { verifyOtp, cleanupOtp, sendPasswordResetOtp } from './otp.service.js'
 
 export async function signup({ firstName, lastName, email, password, userType, university, graduationYear, otp }) {
   // 1. Verify OTP first
@@ -92,3 +92,28 @@ export async function getMe(userId) {
     createdAt:      u.created_at,
   }
 }
+
+export async function resetPassword({ email, otp, newPassword }) {
+  // 1. Verify OTP
+  await verifyOtp(email, otp)
+
+  // 2. Check user exists
+  const [rows] = await pool.query('SELECT id FROM users WHERE email = ?', [email])
+  if (!rows[0]) throw new AppError('No account found with this email', 404)
+
+  // 3. Hash new password
+  const passwordHash = await bcrypt.hash(newPassword, 12)
+
+  // 4. Update password
+  await pool.query(
+    'UPDATE users SET password_hash = ? WHERE email = ?',
+    [passwordHash, email]
+  )
+
+  // 5. Clean up OTP
+  await cleanupOtp(email)
+
+  return { message: 'Password reset successfully' }
+}
+
+export { sendPasswordResetOtp }
