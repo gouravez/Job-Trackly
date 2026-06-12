@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import BottomNav from "./BottomNav";
+import GlobalSearch from "./GlobalSearch";
 
 export default function DashboardLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -9,8 +10,12 @@ export default function DashboardLayout({ children }) {
   return (
     <div className="flex min-h-screen bg-light-bg dark:bg-dark-bg">
       <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((v) => !v)} />
+
+      {/* Global search is fixed, centered at the top of the viewport */}
+      <GlobalSearch />
+
       <main
-        className={`flex-1 min-h-screen overflow-y-auto transition-all duration-300 ${sidebarWidth} pb-20 md:pb-0`}
+        className={`flex-1 min-h-screen overflow-y-auto transition-all duration-300 ${sidebarWidth} pb-20 md:pb-0 pt-16`}
       >
         {children}
       </main>

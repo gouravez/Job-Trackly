@@ -9,22 +9,25 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
+  Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import useAuthStore from "@/store/authStore";
 
 const NAV = [
-  { label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
+  { label: "Dashboard",   icon: LayoutDashboard, to: "/dashboard" },
   {
     label: "Applications",
     icon: FileText,
     to: "/applications",
     children: [{ label: "Kanban Board", to: "/kanban" }],
   },
-  { label: "Calendar", icon: CalendarDays, to: "/calendar" },
-  { label: "Analytics", icon: BarChart2, to: "/analytics" },
-  { label: "Settings", icon: Settings, to: "/settings" },
+  { label: "Calendar",         icon: CalendarDays, to: "/calendar" },
+  { label: "Referral Network", icon: Users,        to: "/referrals" },
+  { label: "Analytics",        icon: BarChart2,    to: "/analytics" },
+  { label: "Settings",         icon: Settings,     to: "/settings" },
 ];
+
 export default function Sidebar({ collapsed, onToggle }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -34,11 +37,8 @@ export default function Sidebar({ collapsed, onToggle }) {
     await logout();
     navigate("/signin", { replace: true });
   };
-  const initials = user
-    ? `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`.toUpperCase() ||
-      "U"
-    : "U";
-  const displayName = user ? `${user.firstName} ${user.lastName}` : "User";
+  const initials     = user ? `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`.toUpperCase() || "U" : "U";
+  const displayName  = user ? `${user.firstName} ${user.lastName}` : "User";
   const displayEmail = user?.email || "";
 
   return (
@@ -89,11 +89,7 @@ export default function Sidebar({ collapsed, onToggle }) {
                   )
                 }
               >
-                <item.icon
-                  size={18}
-                  strokeWidth={1.8}
-                  className="flex-shrink-0"
-                />
+                <item.icon size={18} strokeWidth={1.8} className="flex-shrink-0" />
                 {!collapsed && item.label}
               </NavLink>
 
@@ -137,23 +133,14 @@ export default function Sidebar({ collapsed, onToggle }) {
           collapsed && "flex justify-center",
         )}
       >
-        <div
-          className={cn(
-            "flex items-center gap-3",
-            collapsed && "justify-center",
-          )}
-        >
+        <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
           <div className="w-8 h-8 rounded-full bg-dark-s4 dark:bg-dark-s4 border border-dark-accent/40 flex items-center justify-center text-dark-accent3 text-xs font-bold flex-shrink-0">
             {initials}
           </div>
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-gray-900 dark:text-dark-tx1 truncate">
-                {displayName}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-dark-tx3 truncate">
-                {displayEmail}
-              </p>
+              <p className="text-sm font-semibold text-gray-900 dark:text-dark-tx1 truncate">{displayName}</p>
+              <p className="text-xs text-gray-500 dark:text-dark-tx3 truncate">{displayEmail}</p>
             </div>
           )}
           {!collapsed && (

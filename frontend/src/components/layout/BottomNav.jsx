@@ -2,19 +2,18 @@ import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
   FileText,
-  Kanban,
   BarChart2,
-  Settings,
   CalendarDays,
+  Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { label: "Home", icon: LayoutDashboard, to: "/dashboard" },
-  { label: "Apps", icon: FileText, to: "/applications" },
-  { label: "Calendar", icon: CalendarDays, to: "/calendar" },
-  { label: "Stats", icon: BarChart2, to: "/analytics" },
-  { label: "Settings", icon: Settings, to: "/settings" },
+  { label: "Home",     icon: LayoutDashboard, to: "/dashboard" },
+  { label: "Apps",     icon: FileText,        to: "/applications" },
+  { label: "Calendar", icon: CalendarDays,    to: "/calendar" },
+  { label: "Network",  icon: Users,           to: "/referrals" },
+  { label: "Stats",    icon: BarChart2,       to: "/analytics" },
 ];
 
 export default function BottomNav() {

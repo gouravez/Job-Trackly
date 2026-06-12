@@ -70,4 +70,18 @@ export const calendarService = {
   pushEvent:    (data)                  => api.post('/calendar/events', data),
   deleteEvent:  (data)                  => api.delete('/calendar/events', { data }),
 }
+
+// ---------------------------------------------------------------------------
+// Referral Network endpoints
+// ---------------------------------------------------------------------------
+export const referralService = {
+  getAll:          ()                      => api.get('/referrals'),
+  getOne:          (id)                    => api.get(`/referrals/${id}`),
+  create:          (data)                  => api.post('/referrals', data),
+  update:          (id, data)              => api.patch(`/referrals/${id}`, data),
+  remove:          (id)                    => api.delete(`/referrals/${id}`),
+  linkApplication: (id, data)              => api.post(`/referrals/${id}/link`, data),
+  unlinkApplication:(id, appId)            => api.delete(`/referrals/${id}/link/${appId}`),
+}
+
 export default api

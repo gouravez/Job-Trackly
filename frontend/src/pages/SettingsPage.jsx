@@ -1,5 +1,6 @@
 // frontend/src/pages/SettingsPage.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { User, Palette, Bell, Shield } from "lucide-react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import ProfileSection from "@/components/settings/ProfileSection";
@@ -23,8 +24,25 @@ const SECTION_MAP = {
 };
 
 export default function SettingsPage() {
-  const [active, setActive] = useState("profile");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabFromUrl = searchParams.get("tab");
+  const [active, setActive] = useState(
+    SECTION_MAP[tabFromUrl] ? tabFromUrl : "profile"
+  );
   const ActiveSection = SECTION_MAP[active];
+
+  // Keep the active tab in sync if the URL changes (e.g. via global search,
+  // back/forward navigation, or a direct link to /settings?tab=...)
+  useEffect(() => {
+    if (tabFromUrl && SECTION_MAP[tabFromUrl] && tabFromUrl !== active) {
+      setActive(tabFromUrl);
+    }
+  }, [tabFromUrl]);
+
+  const handleTabChange = (key) => {
+    setActive(key);
+    setSearchParams(key === "profile" ? {} : { tab: key }, { replace: true });
+  };
 
   return (
     <DashboardLayout>
@@ -43,7 +61,7 @@ export default function SettingsPage() {
           {TABS.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
-              onClick={() => setActive(key)}
+              onClick={() => handleTabChange(key)}
               className={cn(
                 "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
                 active === key

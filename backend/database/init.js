@@ -15,7 +15,7 @@ import { ENV } from '../src/config/env.js'
 const RESET = process.argv.includes('--reset')
 const DB    = ENV.DB_NAME  
 
-const TABLES = ['resumes', 'contacts', 'timeline_events', 'applications', 'users', 'email_otps' ]
+const TABLES = ['resumes', 'contacts', 'timeline_events', 'referral_applications', 'referrals', 'applications', 'users', 'email_otps' ]
 
 async function init() {
   const conn = await createConnection({
