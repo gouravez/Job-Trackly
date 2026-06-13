@@ -11,6 +11,7 @@ import userRoutes        from './routes/user.routes.js'
 import reminderRoutes    from './routes/reminder.routes.js'
 import calendarRoutes    from './routes/calendar.routes.js'
 import referralRoutes    from './routes/referral.routes.js'
+import resumeRoutes from './routes/resume.routes.js'
 import { errorHandler } from './middleware/error.middleware.js'
 
 const app = express()
@@ -48,6 +49,7 @@ app.use('/api/users/me',     userRoutes)
 app.use('/api/reminders',    reminderRoutes)
 app.use('/api/calendar',     calendarRoutes)
 app.use('/api/referrals',    referralRoutes)
+app.use('/api/resumes', resumeRoutes)
 
 // 404
 app.use((_req, res) => {

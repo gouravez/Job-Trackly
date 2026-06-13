@@ -91,3 +91,26 @@ init().catch((err) => {
   if (err.code) console.error('   Error code:', err.code)
   process.exit(1)
 })
+
+// After all the existing table creation code, add:
+
+// Run any pending migrations
+const migrations = [
+  './migration.s3.sql',
+  './migration.add.remainders.sql',
+  './migration.gcal.sql',
+  './migration.referral.sql',
+]
+
+for (const file of migrations) {
+  try {
+    const sql = readFileSync(new URL(file, import.meta.url), 'utf8')
+    await conn.query(sql)
+    console.log(`✅ Migration applied: ${file}`)
+  } catch (err) {
+    // IF NOT EXISTS guards make this safe to re-run
+    if (err.code !== 'ER_DUP_FIELDNAME') {
+      console.warn(`⚠️  Migration warning for ${file}: ${err.message}`)
+    }
+  }
+}

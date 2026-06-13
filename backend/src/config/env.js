@@ -19,6 +19,10 @@ const envSchema = z.object({
   SMTP_USER:     z.string().min(1),
   SMTP_PASS:     z.string().min(1),
   SMTP_FROM:     z.string().default('Job Trackly <noreply@jobtrackly.com>'),
+  AWS_ACCESS_KEY_ID:     z.string().min(1),
+  AWS_SECRET_ACCESS_KEY: z.string().min(1),
+  AWS_REGION:     z.string().min(1),
+  AWS_S3_BUCKET:  z.string().min(1),
 })
 
 const parsed = envSchema.safeParse(process.env)

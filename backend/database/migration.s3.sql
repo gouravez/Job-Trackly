@@ -1,0 +1,7 @@
+USE Job_Trackly;
+
+ALTER TABLE resumes
+  ADD COLUMN s3_key    VARCHAR(500) DEFAULT NULL AFTER filename,
+  ADD COLUMN mime_type VARCHAR(100) DEFAULT NULL AFTER s3_key;
+
+EXIT;

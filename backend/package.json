@@ -14,6 +14,8 @@
   "author": "Gourav",
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1068.0",
+    "@aws-sdk/s3-request-presigner": "^3.1068.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -22,6 +24,7 @@
     "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.11.0",
+    "multer": "^2.1.1",
     "mysql2": "^3.22.5",
     "nodemailer": "^8.0.10",
     "passport": "^0.7.0",
