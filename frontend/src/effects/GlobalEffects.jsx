@@ -59,6 +59,33 @@ export function Reveal({ children, variant = "up", delay = 0, className = "", st
 // Inject a tiny global stylesheet that flips opacity/transform when data-visible fires.
 // Using a <style> tag ensures it beats Tailwind's purge (no Tailwind class needed).
 export const GLOBAL_CSS = `
+/* ── Reveal-on-scroll: flips opacity/transform once data-visible="true" is set ── */
+/* (Reveal's inline style starts every element at opacity:0 + an offset transform;     */
+/*  this rule is what actually animates it in — without it, content stays invisible.) */
+[data-reveal] {
+  will-change: opacity, transform;
+}
+[data-reveal][data-visible="true"] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ── SmoothScroll layer ───────────────────────────────────────────────────── */
+/* Must be position:fixed so it's removed from normal layout flow — otherwise  */
+/* it still occupies its full natural height on the page IN ADDITION to the   */
+/* same-height #smooth-spacer right after it, roughly doubling document       */
+/* height and leaving a large empty gap once you scroll past the real footer. */
+.smooth-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+#smooth-spacer {
+  pointer-events: none;
+}
+
 /* ── Custom circular cursor ───────────────────────────────────────────────── */
 html.custom-cursor-active,
 html.custom-cursor-active * {
@@ -99,16 +126,16 @@ html.custom-cursor-active * {
   height: 56px;
   margin-left: -28px;
   margin-top: -28px;
-  background: rgba(79,70,229,0.08);
-  border-color: rgba(79,70,229,0.55);
+  background: rgba(17,24,39,0.08);
+  border-color: rgba(17,24,39,0.65);
 }
 .cursor-ring[data-state="down"] {
   width: 22px;
   height: 22px;
   margin-left: -11px;
   margin-top: -11px;
-  background: rgba(79,70,229,0.18);
-  border-color: rgba(79,70,229,0.75);
+  background: rgba(17,24,39,0.18);
+  border-color: rgba(17,24,39,0.85);
 }
 
 /* Dark mode — flip the cursor to light so it stays visible on dark surfaces */
@@ -119,16 +146,34 @@ html.dark .cursor-ring {
   border-color: rgba(232,234,242,0.45);
 }
 html.dark .cursor-ring[data-state="hover"] {
-  background: rgba(107,142,245,0.14);
-  border-color: rgba(107,142,245,0.65);
+  background: rgba(232,234,242,0.12);
+  border-color: rgba(232,234,242,0.7);
 }
 html.dark .cursor-ring[data-state="down"] {
-  background: rgba(107,142,245,0.28);
-  border-color: rgba(107,142,245,0.85);
+  background: rgba(232,234,242,0.22);
+  border-color: rgba(232,234,242,0.9);
 }
 
 @media (pointer: coarse) {
   .cursor-dot, .cursor-ring { display: none !important; }
+}
+
+/* Landing page is always a white surface — keep the cursor dark even if
+   the user's saved app theme is dark. The landing page adds the
+   "on-light-landing" class to <html> while mounted. */
+html.on-light-landing .cursor-dot {
+  background: #111827;
+}
+html.on-light-landing .cursor-ring {
+  border-color: rgba(17,24,39,0.45);
+}
+html.on-light-landing .cursor-ring[data-state="hover"] {
+  background: rgba(17,24,39,0.08);
+  border-color: rgba(17,24,39,0.65);
+}
+html.on-light-landing .cursor-ring[data-state="down"] {
+  background: rgba(17,24,39,0.18);
+  border-color: rgba(17,24,39,0.85);
 }
 `;
 

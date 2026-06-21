@@ -2,7 +2,47 @@ import { Link as RouterLink } from "react-router-dom";
 import { CheckCircle2, Sparkles } from "lucide-react";
 import Button from "@/components/ui/Button.jsx";
 import { Reveal } from "@/effects/GlobalEffects.jsx";
-import { PRICING_PLANS } from "@/components/landing/Landingdata.js";
+
+const PRICING_PLANS = [
+  {
+    name: "Student",
+    tagline: "Built for campus recruiting",
+    price: "0",
+    highlight: false,
+    features: [
+      "Unlimited applications",
+      "6-stage Kanban board",
+      "Calendar + reminders",
+      "Resume vault",
+    ],
+  },
+  {
+    name: "Job Seeker",
+    tagline: "Everything, for everyone",
+    price: "0",
+    highlight: true,
+    badge: "Most popular",
+    features: [
+      "Everything in Student",
+      "Full analytics & funnel",
+      "Google Calendar 2-way sync",
+      "Referral network tracking",
+      "Priority email support",
+    ],
+  },
+  {
+    name: "Power User",
+    tagline: "For the heavy trackers",
+    price: "0",
+    highlight: false,
+    features: [
+      "Everything in Job Seeker",
+      "Unlimited resume versions",
+      "Custom reminder cadence",
+      "Early access to new features",
+    ],
+  },
+];
 
 export default function LandingPricing() {
   return (

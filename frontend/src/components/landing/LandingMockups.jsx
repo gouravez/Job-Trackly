@@ -1,4 +1,17 @@
-import { KANBAN_COLS, KANBAN_CARDS } from "@/components/landing/Landingdata.js";
+const KANBAN_COLS = [
+  { label: "Saved",      dot: "bg-gray-400",   count: 5  },
+  { label: "Applied",    dot: "bg-blue-500",   count: 12 },
+  { label: "Assessment", dot: "bg-purple-500", count: 3  },
+  { label: "Interview",  dot: "bg-teal-500",   count: 4  },
+  { label: "Offer",      dot: "bg-green-500",  count: 1  },
+  { label: "Rejected",   dot: "bg-red-500",    count: 3  },
+];
+
+const KANBAN_CARDS = {
+  Applied:   [{ role: "Frontend Engineer", company: "Stripe" }, { role: "Product Designer", company: "Linear" }],
+  Interview: [{ role: "SWE — Backend",     company: "Google" }],
+  Offer:     [{ role: "PM, Growth",        company: "Notion" }],
+};
 
 export function KanbanMockup() {
   return (
@@ -16,40 +29,44 @@ export function KanbanMockup() {
           </div>
         </div>
       </div>
-      <div className="p-4 bg-gray-50 overflow-x-auto">
-        <div className="flex gap-3 min-w-max">
-          {KANBAN_COLS.map((col) => (
-            <div key={col.label} className="w-36 flex-shrink-0">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-1.5">
-                  <span className={`w-2 h-2 rounded-full ${col.dot}`} />
-                  <span className="text-[11px] font-semibold text-gray-700">
-                    {col.label}
-                  </span>
-                </div>
-                <span className="text-[10px] text-gray-400">{col.count}</span>
-              </div>
-              <div className="space-y-2">
-                {(KANBAN_CARDS[col.label] || []).map((card) => (
-                  <div
-                    key={card.role}
-                    className="bg-white rounded-lg p-2.5 shadow-sm border border-gray-100"
-                  >
-                    <div className="text-[11px] font-semibold text-gray-800">
-                      {card.role}
-                    </div>
-                    <div className="text-[10px] text-gray-400 mt-0.5">
-                      {card.company}
-                    </div>
+      <div className="relative">
+        <div className="p-4 bg-gray-50 overflow-x-auto snap-x snap-mandatory scroll-px-4 [-webkit-overflow-scrolling:touch]">
+          <div className="flex gap-3 min-w-max">
+            {KANBAN_COLS.map((col) => (
+              <div key={col.label} className="w-36 flex-shrink-0 snap-start">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className={`w-2 h-2 rounded-full ${col.dot}`} />
+                    <span className="text-[11px] font-semibold text-gray-700">
+                      {col.label}
+                    </span>
                   </div>
-                ))}
-                {!KANBAN_CARDS[col.label] && (
-                  <div className="h-8 rounded-lg border-2 border-dashed border-gray-200" />
-                )}
+                  <span className="text-[10px] text-gray-400">{col.count}</span>
+                </div>
+                <div className="space-y-2">
+                  {(KANBAN_CARDS[col.label] || []).map((card) => (
+                    <div
+                      key={card.role}
+                      className="bg-white rounded-lg p-2.5 shadow-sm border border-gray-100"
+                    >
+                      <div className="text-[11px] font-semibold text-gray-800">
+                        {card.role}
+                      </div>
+                      <div className="text-[10px] text-gray-400 mt-0.5">
+                        {card.company}
+                      </div>
+                    </div>
+                  ))}
+                  {!KANBAN_CARDS[col.label] && (
+                    <div className="h-8 rounded-lg border-2 border-dashed border-gray-200" />
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+        {/* Right-edge fade — signals there's more to swipe to on mobile */}
+        <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-gray-50 to-transparent" />
       </div>
     </div>
   );

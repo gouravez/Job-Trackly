@@ -1,5 +1,10 @@
 import { Reveal } from "@/effects/GlobalEffects.jsx";
-import { STUDENT_CARDS } from "@/components/landing/Landingdata.js";
+
+const STUDENT_CARDS = [
+  { emoji: "🎓", title: "Campus recruiting ready", desc: "Track early deadlines, rolling admissions, and multiple recruiting cycles at once." },
+  { emoji: "🤝", title: "Referral network",        desc: "Track alumni, professors, and recruiters. Link them to applications to remember who helped." },
+  { emoji: "📄", title: "Resume versions",         desc: "Tailor your resume per role and keep every version organized in one place." },
+];
 
 export default function LandingStudents() {
   return (

@@ -1,5 +1,11 @@
 import { Reveal } from "@/effects/GlobalEffects.jsx";
-import { HOW_IT_WORKS } from "@/components/landing/Landingdata.js";
+
+const HOW_IT_WORKS = [
+  { step: "01", title: "Sign up in seconds",           desc: "Create an account with email (OTP-verified) or one-click Google sign-in — no credit card, no setup." },
+  { step: "02", title: "Add an application",          desc: "Log a role in seconds: company, position, status, date applied. Or save it first and apply later." },
+  { step: "03", title: "Move it through the pipeline",desc: "Drag cards across your Kanban as things progress. Assessment, interview, offer — it all stays organized." },
+  { step: "04", title: "Never miss a beat",           desc: "Calendar keeps your interview dates in view. Reminders ping you before follow-ups are due. Analytics show what's working." },
+];
 
 export default function LandingHowItWorks() {
   return (

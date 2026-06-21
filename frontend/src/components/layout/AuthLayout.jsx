@@ -1,8 +1,18 @@
+import { useEffect } from "react";
 import { Check } from "lucide-react";
 import Logo from "@/components/ui/Logo.jsx";
 import AvatarStack from "@/components/ui/AvatarStack.jsx";
 
 export default function AuthLayout({ children, headline, subline, features }) {
+  // This layout is always a white surface regardless of the user's saved
+  // app theme, so flag <html> while mounted to keep the custom cursor dark.
+  useEffect(() => {
+    document.documentElement.classList.add("on-light-landing");
+    return () => {
+      document.documentElement.classList.remove("on-light-landing");
+    };
+  }, []);
+
   return (
     <div className="min-h-screen flex">
       {/* ── Left panel ────────────────────────────────────────────── */}

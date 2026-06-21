@@ -1,5 +1,11 @@
 import { useEffect, useRef } from "react";
-import { STATS } from "@/components/landing/Landingdata.js";
+
+const STATS = [
+  { value: "12k+", label: "Applications tracked" },
+  { value: "3.2k", label: "Active job seekers" },
+  { value: "98%", label: "Would recommend" },
+  { value: "4.9★", label: "Average rating" },
+];
 
 // ─── StatsSection — observer triggers children directly ───────────────────────
 export default function LandingStats() {

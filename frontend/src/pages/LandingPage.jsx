@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Navbar from "@/components/layout/Navbar.jsx";
 import { SmoothScroll } from "@/effects/GlobalEffects.jsx";
 import LandingHero from "@/components/landing/LandingHero.jsx";
@@ -14,10 +15,16 @@ import {
 } from "@/components/landing/LandingScrollUI.jsx";
 
 export default function LandingPage() {
+  // This page is always a white surface regardless of the user's saved
+  // app theme, so flag <html> while mounted to keep the custom cursor dark.
+  useEffect(() => {
+    document.documentElement.classList.add("on-light-landing");
+    return () => {
+      document.documentElement.classList.remove("on-light-landing");
+    };
+  }, []);
+
   return (
-    // "landing-light-surface" tells the global cursor CSS to ignore the
-    // dark-mode color flip here — this page is always white, regardless
-    // of the user's saved app theme.
     <div className="landing-light-surface min-h-screen bg-white font-sans">
       <Navbar />
 

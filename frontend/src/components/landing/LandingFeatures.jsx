@@ -1,7 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  LayoutDashboard, BarChart2, Bell, FileText,
+  Users, CalendarDays, Columns3, Search, Moon,
+} from "lucide-react";
 import { Reveal } from "@/effects/GlobalEffects.jsx";
-import { FEATURES } from "@/components/landing/Landingdata.js";
+
+const FEATURES = [
+  { icon: LayoutDashboard, title: "Dashboard at a glance",         desc: "Stat cards, a 30-day activity chart, your most recent applications, and follow-ups that are due — all the moment you log in.", accent: "text-[#2f54c8]", bg: "bg-blue-50" },
+  { icon: Columns3,        title: "6-stage Kanban board",          desc: "Drag applications through Saved → Applied → Assessment → Interview → Offer → Rejected. Your full pipeline, at a glance.",      accent: "text-blue-600",   bg: "bg-blue-50"   },
+  { icon: Search,          title: "Searchable applications table", desc: "Search by company or role, filter by status, and page through every application you've ever logged.",                       accent: "text-cyan-600",   bg: "bg-cyan-50"   },
+  { icon: BarChart2,       title: "Analytics & funnel",            desc: "Monthly trends, status breakdown, application funnel, and top companies — see exactly where you're winning.",                accent: "text-purple-600", bg: "bg-purple-50" },
+  { icon: CalendarDays,    title: "Calendar + Google sync",        desc: "Visualize interviews, follow-ups, and deadlines on a calendar view. Connect Google Calendar for two-way sync.",               accent: "text-teal-600",   bg: "bg-teal-50"   },
+  { icon: Bell,            title: "Follow-up reminders",           desc: "Automated daily or weekly nudge emails so a stale application never slips through the cracks.",                               accent: "text-amber-600",  bg: "bg-amber-50"  },
+  { icon: FileText,        title: "Resume vault",                  desc: "Securely store every resume version and attach the right one to the right application.",                                      accent: "text-rose-600",   bg: "bg-rose-50"   },
+  { icon: Users,           title: "Referral network",              desc: "Track colleagues, alumni, recruiters, and mentors by relationship and strength, then link them to the roles they helped with.", accent: "text-green-600",  bg: "bg-green-50"  },
+  { icon: Moon,            title: "Make it yours",                 desc: "Light, dark, or system theme, your profile details, and reminder cadence — all in one Settings page.",                        accent: "text-slate-600",  bg: "bg-slate-100" },
+];
 
 const AUTO_ADVANCE_MS = 4000;
 // How many cards are visible at once (desktop). On mobile we show 1.
