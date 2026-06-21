@@ -59,43 +59,6 @@ export function Reveal({ children, variant = "up", delay = 0, className = "", st
 // Inject a tiny global stylesheet that flips opacity/transform when data-visible fires.
 // Using a <style> tag ensures it beats Tailwind's purge (no Tailwind class needed).
 export const GLOBAL_CSS = `
-[data-reveal][data-visible="true"] {
-  opacity: 1 !important;
-  transform: none !important;
-}
-[data-stat-pop][data-visible="true"] {
-  animation: statPop 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
-}
-@keyframes statPop {
-  0%   { opacity:0; transform:scale(0.75); }
-  65%  { transform:scale(1.08); }
-  100% { opacity:1; transform:scale(1); }
-}
-.feat-card {
-  border-radius: 1rem;
-  padding: 1.5rem;
-  transition: box-shadow 0.22s ease, transform 0.22s ease;
-  will-change: transform;
-}
-.feat-card:hover {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.09);
-  transform: translateY(-5px) !important;
-}
-
-/* ── Scroll progress bar ──────────────────────────────────────────────────── */
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: #2f54c8;
-  transform-origin: left;
-  transform: scaleX(0);
-  z-index: 10001;
-  will-change: transform;
-}
-
 /* ── Custom circular cursor ───────────────────────────────────────────────── */
 html.custom-cursor-active,
 html.custom-cursor-active * {
@@ -113,7 +76,7 @@ html.custom-cursor-active * {
   background: #111827;
   pointer-events: none;
   z-index: 10000;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, background-color 0.25s ease;
 }
 .cursor-ring {
   position: fixed;
@@ -147,139 +110,25 @@ html.custom-cursor-active * {
   background: rgba(79,70,229,0.18);
   border-color: rgba(79,70,229,0.75);
 }
+
+/* Dark mode — flip the cursor to light so it stays visible on dark surfaces */
+html.dark .cursor-dot {
+  background: #e8eaf2;
+}
+html.dark .cursor-ring {
+  border-color: rgba(232,234,242,0.45);
+}
+html.dark .cursor-ring[data-state="hover"] {
+  background: rgba(107,142,245,0.14);
+  border-color: rgba(107,142,245,0.65);
+}
+html.dark .cursor-ring[data-state="down"] {
+  background: rgba(107,142,245,0.28);
+  border-color: rgba(107,142,245,0.85);
+}
+
 @media (pointer: coarse) {
   .cursor-dot, .cursor-ring { display: none !important; }
-}
-
-/* ── Click ripple ─────────────────────────────────────────────────────────── */
-.click-ripple {
-  position: fixed;
-  width: 36px;
-  height: 36px;
-  margin-left: -18px;
-  margin-top: -18px;
-  border-radius: 50%;
-  border: 2px solid rgba(79,70,229,0.55);
-  pointer-events: none;
-  z-index: 9998;
-  transform: scale(0.2);
-  opacity: 0.9;
-  animation: rippleExpand 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
-}
-@keyframes rippleExpand {
-  to { transform: scale(1.7); opacity: 0; }
-}
-
-/* ── Smooth-scroll wrapper ────────────────────────────────────────────────── */
-/* The real content sits inside #smooth-content, pinned to the viewport and   */
-/* translated by JS. #smooth-spacer is an invisible same-height div so the    */
-/* browser still gets a native, full-length scrollbar to drag.                */
-#smooth-spacer {
-  visibility: hidden;
-  pointer-events: none;
-}
-.smooth-content {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  will-change: transform;
-}
-
-/* ── Pricing cards ─────────────────────────────────────────────────────────── */
-.price-card {
-  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease, border-color 0.3s ease;
-}
-.price-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 45px rgba(17,24,39,0.10);
-}
-
-/* ── Sidewise feature swap ────────────────────────────────────────────────── */
-.feat-swap-panel {
-  position: relative;
-  overflow: hidden;
-}
-.feat-swap-slide-right {
-  animation: featSwapInRight 0.45s cubic-bezier(0.16,1,0.3,1) both;
-}
-.feat-swap-slide-left {
-  animation: featSwapInLeft 0.45s cubic-bezier(0.16,1,0.3,1) both;
-}
-@keyframes featSwapInRight {
-  from { opacity: 0; transform: translateX(36px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes featSwapInLeft {
-  from { opacity: 0; transform: translateX(-36px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-/* ── Feature carousel ─────────────────────────────────────────────────────── */
-.feat-carousel-in-right {
-  animation: featCarouselRight 0.38s cubic-bezier(0.16,1,0.3,1) both;
-}
-.feat-carousel-in-left {
-  animation: featCarouselLeft 0.38s cubic-bezier(0.16,1,0.3,1) both;
-}
-@keyframes featCarouselRight {
-  from { opacity: 0; transform: translateX(48px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes featCarouselLeft {
-  from { opacity: 0; transform: translateX(-48px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-.feat-feature-card {
-  cursor: pointer;
-  will-change: transform, opacity;
-}
-.feat-tab {
-  position: relative;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-.feat-tab[data-active="true"] {
-  background-color: rgba(99,102,241,0.06);
-}
-.feat-tab-bar {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  border-radius: 2px;
-  background: #2f54c8;
-  transform: scaleY(0);
-  transition: transform 0.25s cubic-bezier(0.16,1,0.3,1);
-  transform-origin: center;
-}
-.feat-tab[data-active="true"] .feat-tab-bar {
-  transform: scaleY(1);
-}
-.feat-progress-track {
-  height: 2px;
-  background: rgba(17,24,39,0.06);
-  border-radius: 1px;
-  overflow: hidden;
-}
-.feat-progress-fill {
-  height: 100%;
-  background: #2f54c8;
-  transform-origin: left;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .feat-swap-slide-right, .feat-swap-slide-left { animation: none !important; }
-  [data-reveal], [data-stat-pop] {
-    opacity: 1 !important;
-    transform: none !important;
-    animation: none !important;
-    transition: none !important;
-  }
-  .cursor-dot, .cursor-ring { display: none !important; }
-  html.custom-cursor-active, html.custom-cursor-active * { cursor: auto !important; }
-  .smooth-content { position: static !important; transform: none !important; }
-  #smooth-spacer { display: none !important; }
 }
 `;
 

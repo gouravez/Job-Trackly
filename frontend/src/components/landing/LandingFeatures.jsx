@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Reveal } from "@/components/landing/LandingEffects.jsx";
+import { Reveal } from "@/effects/GlobalEffects.jsx";
 import { FEATURES } from "@/components/landing/Landingdata.js";
 
 const AUTO_ADVANCE_MS = 4000;
@@ -38,8 +38,9 @@ export default function LandingFeatures() {
   // We show VISIBLE cards; centre card = active.
   // On mobile (< md) only 1 card shown — the active one.
   const offset = Math.floor(VISIBLE / 2); // 1 for VISIBLE=3
-  const indices = Array.from({ length: VISIBLE }, (_, k) =>
-    (active - offset + k + total) % total
+  const indices = Array.from(
+    { length: VISIBLE },
+    (_, k) => (active - offset + k + total) % total,
   );
 
   return (
@@ -98,26 +99,33 @@ export default function LandingFeatures() {
                     data-cursor-hover
                     className={`
                       feat-feature-card text-left rounded-2xl border p-6 transition-all duration-300
-                      ${isCenter
-                        ? "border-blue-200 bg-white shadow-lg shadow-blue-100/50 scale-100 opacity-100"
-                        : "border-gray-100 bg-gray-50/60 scale-95 opacity-60 hover:opacity-80 hover:scale-[0.97]"
+                      ${
+                        isCenter
+                          ? "border-blue-200 bg-white shadow-lg shadow-blue-100/50 scale-100 opacity-100"
+                          : "border-gray-100 bg-gray-50/60 scale-95 opacity-60 hover:opacity-80 hover:scale-[0.97]"
                       }
                       ${position === 0 ? "hidden md:block" : ""}
                       ${position === 2 ? "hidden md:block" : ""}
                     `}
                   >
                     {/* Icon */}
-                    <div className={`w-12 h-12 rounded-xl ${f.bg} flex items-center justify-center mb-4`}>
+                    <div
+                      className={`w-12 h-12 rounded-xl ${f.bg} flex items-center justify-center mb-4`}
+                    >
                       <Icon size={22} className={f.accent} strokeWidth={1.8} />
                     </div>
 
                     {/* Title */}
-                    <h3 className={`font-bold text-lg mb-2 ${isCenter ? "text-gray-900" : "text-gray-600"}`}>
+                    <h3
+                      className={`font-bold text-lg mb-2 ${isCenter ? "text-gray-900" : "text-gray-600"}`}
+                    >
                       {f.title}
                     </h3>
 
                     {/* Description — full on centre card, truncated on side cards */}
-                    <p className={`text-sm leading-relaxed ${isCenter ? "text-gray-500" : "text-gray-400 line-clamp-3"}`}>
+                    <p
+                      className={`text-sm leading-relaxed ${isCenter ? "text-gray-500" : "text-gray-400 line-clamp-3"}`}
+                    >
                       {f.desc}
                     </p>
 
@@ -154,9 +162,10 @@ export default function LandingFeatures() {
               aria-label={`Go to feature ${i + 1}`}
               data-cursor-hover
               className={`rounded-full transition-all duration-300
-                ${i === active
-                  ? "w-6 h-1.5 bg-[#2f54c8]"
-                  : "w-1.5 h-1.5 bg-gray-300 hover:bg-gray-400"
+                ${
+                  i === active
+                    ? "w-6 h-1.5 bg-[#2f54c8]"
+                    : "w-1.5 h-1.5 bg-gray-300 hover:bg-gray-400"
                 }`}
             />
           ))}

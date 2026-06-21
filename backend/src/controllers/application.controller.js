@@ -14,6 +14,13 @@ export async function getApplication(req, res, next) {
   } catch (err) { next(err) }
 }
 
+export async function getTimeline(req, res, next) {
+  try {
+    const data = await appService.getTimeline(req.user.userId, Number(req.params.id))
+    res.json({ success: true, data })
+  } catch (err) { next(err) }
+}
+
 export async function createApplication(req, res, next) {
   try {
     const data = await appService.create(req.user.userId, req.body)

@@ -1,7 +1,7 @@
 import { Link as RouterLink } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import Button from "@/components/ui/Button.jsx";
-import { Reveal } from "@/components/landing/LandingEffects.jsx";
+import { Reveal } from "@/effects/GlobalEffects.jsx";
 
 export default function LandingCTA() {
   return (

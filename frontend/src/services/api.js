@@ -34,12 +34,13 @@ export const authService = {
 // Applications endpoints
 // ---------------------------------------------------------------------------
 export const applicationService = {
-  getAll:   ()           => api.get('/applications'),
-  getOne:   (id)         => api.get(`/applications/${id}`),
-  getStats: ()           => api.get('/applications/stats'),
-  create:   (data)       => api.post('/applications',      data),
-  update:   (id, data)   => api.patch(`/applications/${id}`, data),
-  remove:   (id)         => api.delete(`/applications/${id}`),
+  getAll:      ()           => api.get('/applications'),
+  getOne:      (id)         => api.get(`/applications/${id}`),
+  getTimeline: (id)         => api.get(`/applications/${id}/timeline`),
+  getStats:    ()           => api.get('/applications/stats'),
+  create:      (data)       => api.post('/applications',      data),
+  update:      (id, data)   => api.patch(`/applications/${id}`, data),
+  remove:      (id)         => api.delete(`/applications/${id}`),
 }
 
 // ---------------------------------------------------------------------------

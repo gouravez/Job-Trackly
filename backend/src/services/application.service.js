@@ -17,9 +17,33 @@ function toApp(row) {
     salary: row.salary,
     notes: row.notes,
     dateApplied: row.date_applied,
+    contactName: row.contact_name,
+    contactEmail: row.contact_email,
+    contactTitle: row.contact_title,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
+}
+
+// ---------------------------------------------------------------------------
+// Default activity-log text per status — used when we auto-record a
+// timeline_events row on creation or status change.
+// ---------------------------------------------------------------------------
+const STATUS_ACTIVITY_TEXT = {
+  Saved: "Job saved",
+  Applied: "Application submitted",
+  Assessment: "Assessment completed",
+  Interview: "Status changed to Interview",
+  Offer: "Status changed to Offer",
+  Rejected: "Status changed to Rejected",
+};
+
+async function addTimelineEvent(applicationId, status, note = null) {
+  await pool.query(
+    `INSERT INTO timeline_events (application_id, status, note, event_date)
+     VALUES (?, ?, ?, CURDATE())`,
+    [applicationId, status, note ?? STATUS_ACTIVITY_TEXT[status] ?? null],
+  );
 }
 
 // ── Get all ─────────────────────────────────────────────────────────────────
@@ -54,13 +78,17 @@ export async function create(userId, data) {
     salary,
     notes,
     dateApplied,
+    contactName,
+    contactEmail,
+    contactTitle,
   } = data;
 
   const [result] = await pool.query(
     `INSERT INTO applications
        (user_id, company, role, location, status, priority,
-        job_url, job_type, salary, notes, date_applied)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        job_url, job_type, salary, notes, date_applied,
+        contact_name, contact_email, contact_title)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       userId,
       company,
@@ -73,16 +101,43 @@ export async function create(userId, data) {
       salary ?? null,
       notes ?? null,
       dateApplied ?? null,
+      contactName || null,
+      contactEmail || null,
+      contactTitle || null,
     ],
   );
 
+  const initialStatus = status ?? "Applied";
+  await addTimelineEvent(result.insertId, initialStatus);
+
   return getOne(userId, result.insertId);
+}
+
+// ── Timeline (activity history) ─────────────────────────────────────────────
+export async function getTimeline(userId, id) {
+  await getOne(userId, id); // ownership check + 404 if not found
+
+  const [rows] = await pool.query(
+    `SELECT id, status, note, event_date, created_at
+     FROM timeline_events
+     WHERE application_id = ?
+     ORDER BY event_date DESC, created_at DESC`,
+    [id],
+  );
+
+  return rows.map((r) => ({
+    id: r.id,
+    status: r.status,
+    note: r.note,
+    eventDate: r.event_date,
+    createdAt: r.created_at,
+  }));
 }
 
 // ── Update ──────────────────────────────────────────────────────────────────
 export async function update(userId, id, data) {
   // Ensure it exists and belongs to this user first
-  await getOne(userId, id);
+  const existing = await getOne(userId, id);
 
   const fields = [];
   const values = [];
@@ -98,11 +153,13 @@ export async function update(userId, id, data) {
     salary: "salary",
     notes: "notes",
     dateApplied: "date_applied",
+    contactName: "contact_name",
+    contactEmail: "contact_email",
+    contactTitle: "contact_title",
   };
 
   for (const [key, col] of Object.entries(MAP)) {
     if (data[key] !== undefined) {
-      // console.log(`Updating ${col} to ${data[key]}`);
       fields.push(`${col} = ?`);
       values.push(data[key] === '' ? null : data[key]);
     }
@@ -115,6 +172,10 @@ export async function update(userId, id, data) {
     `UPDATE applications SET ${fields.join(", ")} WHERE id = ? AND user_id = ?`,
     values,
   );
+
+  if (data.status !== undefined && data.status !== existing.status) {
+    await addTimelineEvent(id, data.status);
+  }
 
   return getOne(userId, id);
 }

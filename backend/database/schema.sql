@@ -62,6 +62,9 @@ CREATE TABLE IF NOT EXISTS applications (
                DEFAULT NULL,
   salary       VARCHAR(100)  DEFAULT NULL,
   notes        TEXT          DEFAULT NULL,
+  contact_name  VARCHAR(255) DEFAULT NULL,
+  contact_email VARCHAR(255) DEFAULT NULL,
+  contact_title VARCHAR(255) DEFAULT NULL,
   date_applied DATE          DEFAULT NULL,
   created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP

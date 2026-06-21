@@ -151,9 +151,13 @@ export default function ApplicationDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
           {/* Left — timeline, notes, activity */}
           <div className="lg:col-span-2 space-y-4 sm:space-y-5">
-            <ApplicationTimeline currentStatus={app.status} />
-            <ApplicationNotes />
-            <ActivityHistory />
+            <ApplicationTimeline applicationId={app.id} currentStatus={app.status} />
+            <ApplicationNotes
+              notes={app.notes}
+              updatedAt={app.updatedAt}
+              onSave={(notes) => updateApplication(app.id, { notes })}
+            />
+            <ActivityHistory applicationId={app.id} />
           </div>
 
           {/* Right sidebar */}
@@ -165,7 +169,11 @@ export default function ApplicationDetailPage() {
               dateApplied={app.dateApplied}
             />
             <ResumeCard applicationId={app.id} />
-            <ContactCard />
+            <ContactCard
+              contactName={app.contactName}
+              contactEmail={app.contactEmail}
+              contactTitle={app.contactTitle}
+            />
           </div>
         </div>
       </div>

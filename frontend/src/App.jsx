@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import useAuthStore from '@/store/authStore'
 import ProtectedRoute, { GuestRoute } from '@/components/common/ProtectedRoute'
+import { GLOBAL_CSS, ScrollProgressBar, CustomCursor } from '@/effects/GlobalEffects.jsx'
 import LandingPage            from '@/pages/LandingPage.jsx'
 import SignUpPage             from '@/pages/SignUpPage.jsx'
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage.jsx";
@@ -27,6 +28,13 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      {/* Global cursor + click sound/ripple + scroll progress bar —
+          mounted once here so every page (not just the landing page)
+          gets the same hover/click feel. */}
+      <style dangerouslySetInnerHTML={{ __html: GLOBAL_CSS }} />
+      <ScrollProgressBar />
+      <CustomCursor />
+
       <Routes>
         {/* Public */}
         <Route path="/"              element={<LandingPage />} />

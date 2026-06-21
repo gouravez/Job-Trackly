@@ -1,13 +1,12 @@
 import { Link as RouterLink } from "react-router-dom";
 import { ArrowRight, Play } from "lucide-react";
 import Button from "@/components/ui/Button.jsx";
-import { Reveal, Parallax } from "@/components/landing/LandingEffects.jsx";
+import { Reveal, Parallax } from "@/effects/GlobalEffects.jsx";
 import { KanbanMockup } from "@/components/landing/LandingMockups.jsx";
 
 export default function LandingHero() {
   return (
     <section className="relative max-w-5xl mx-auto px-6 pt-20 pb-16 text-center overflow-hidden">
-      
       <div className="relative z-10">
         <div className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm text-gray-600 mb-8 shadow-sm">
           <span className="text-base">✦</span>
@@ -15,13 +14,15 @@ export default function LandingHero() {
         </div>
 
         <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-[1.08] tracking-tight mb-6">
-          Every application.<br />
+          Every application.
+          <br />
           <span className="text-brand-500">One clean workspace.</span>
         </h1>
 
         <p className="text-lg text-gray-500 max-w-xl mx-auto mb-10 leading-relaxed">
-          A dashboard, Kanban pipeline, analytics, calendar, follow-up reminders, resume vault,
-          and referral contacts — everything your job search needs in one place.
+          A dashboard, Kanban pipeline, analytics, calendar, follow-up
+          reminders, resume vault, and referral contacts — everything your job
+          search needs in one place.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 mb-10">

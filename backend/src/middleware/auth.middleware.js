@@ -1,12 +1,8 @@
 import { verifyToken } from '../lib/jwt.js'
 import { AppError } from './error.middleware.js'
+import pool from '../lib/db.js'
 
-// ---------------------------------------------------------------------------
-// Attach req.user = { userId, email } on every protected route.
-// Usage: router.get('/me', protect, controller)
-// ---------------------------------------------------------------------------
-
-export function protect(req, _res, next) {
+export async function protect(req, _res, next) {
   try {
     const header = req.headers.authorization
     if (!header?.startsWith('Bearer ')) {
@@ -15,7 +11,14 @@ export function protect(req, _res, next) {
 
     const token   = header.split(' ')[1]
     const payload = verifyToken(token)
-    req.user      = { userId: payload.userId, email: payload.email }
+
+    // Confirm the user still exists — catches stale tokens after a db reset/reseed
+    const [rows] = await pool.query('SELECT id FROM users WHERE id = ?', [payload.userId])
+    if (!rows[0]) {
+      throw new AppError('Session expired — please sign in again', 401)
+    }
+
+    req.user = { userId: payload.userId, email: payload.email }
     next()
   } catch (err) {
     if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {

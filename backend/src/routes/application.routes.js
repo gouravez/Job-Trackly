@@ -8,6 +8,7 @@ import {
 import {
   listApplications,
   getApplication,
+  getTimeline,
   createApplication,
   updateApplication,
   deleteApplication,
@@ -22,6 +23,7 @@ router.use(protect)
 router.get('/',          listApplications)
 router.get('/stats',     getStats)
 router.get('/:id',       getApplication)
+router.get('/:id/timeline', getTimeline)
 router.post('/',         validate(createApplicationSchema), createApplication)
 router.patch('/:id',     validate(updateApplicationSchema), updateApplication)
 router.delete('/:id',    deleteApplication)

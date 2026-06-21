@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { Bookmark, Send, ClipboardList, Users, Award } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { applicationService } from "@/services/api";
+import { cn, formatDate } from "@/lib/utils";
 
 const TIMELINE = [
   {
@@ -33,16 +35,32 @@ const STATUS_ORDER = [
   "Rejected",
 ];
 
-const STATUS_NOTES = {
-  Saved: "Bookmarked from the company careers page.",
-  Applied: "Submitted resume and cover letter online.",
-  Assessment: "Completed online coding assessment.",
-  Interview: "Technical interview scheduled with the team.",
-  Offer: "Awaiting final decision.",
-};
-
-export default function ApplicationTimeline({ currentStatus }) {
+export default function ApplicationTimeline({ applicationId, currentStatus }) {
+  const [events, setEvents] = useState([]);
   const statusIdx = STATUS_ORDER.indexOf(currentStatus);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      try {
+        const { data } = await applicationService.getTimeline(applicationId);
+        if (!cancelled) setEvents(data.data);
+      } catch {
+        // Non-critical — the stage progress still renders without dates.
+      }
+    }
+
+    if (applicationId) load();
+    return () => {
+      cancelled = true;
+    };
+  }, [applicationId]);
+
+  // timeline_events comes back ordered most-recent-first, so the first match
+  // per status is the latest time that stage was recorded.
+  const dateForStatus = (status) =>
+    events.find((e) => e.status === status)?.eventDate ?? null;
 
   return (
     <div className="bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border shadow-sm dark:shadow-none p-6">
@@ -54,6 +72,7 @@ export default function ApplicationTimeline({ currentStatus }) {
           const reached = STATUS_ORDER.indexOf(step.key) <= statusIdx;
           const isCurrent = step.key === currentStatus;
           const isPending = STATUS_ORDER.indexOf(step.key) > statusIdx;
+          const eventDate = dateForStatus(step.key);
 
           return (
             <div key={step.key} className="flex gap-4">
@@ -114,16 +133,15 @@ export default function ApplicationTimeline({ currentStatus }) {
                   )}
                 </div>
 
-                <p
-                  className={cn(
-                    "text-sm mt-0.5",
-                    reached
-                      ? "text-gray-500 dark:text-dark-tx2"
-                      : "text-gray-300 dark:text-dark-border",
-                  )}
-                >
-                  {STATUS_NOTES[step.key]}
-                </p>
+                {/* Real recorded date if we have one, otherwise stay quiet
+                    instead of showing made-up text. Reached-but-undated
+                    happens for applications created before timeline_events
+                    existed, or stages skipped via a status jump. */}
+                {reached && (
+                  <p className="text-sm mt-0.5 text-gray-500 dark:text-dark-tx2">
+                    {eventDate ? `Reached ${formatDate(eventDate)}` : "Date not recorded"}
+                  </p>
+                )}
               </div>
             </div>
           );
