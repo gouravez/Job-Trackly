@@ -4,7 +4,7 @@ import {
 } from "lucide-react";
 
 export const KANBAN_COLS = [
-  { label: "Saved",      dot: "bg-gray-400",   count: 5  },
+  { label: "Saved",      dot: "bg-gray-400",   count: 6  },
   { label: "Applied",    dot: "bg-blue-500",   count: 12 },
   { label: "Assessment", dot: "bg-purple-500", count: 3  },
   { label: "Interview",  dot: "bg-teal-500",   count: 4  },
