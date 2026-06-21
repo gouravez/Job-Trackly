@@ -32,8 +32,32 @@ export default function ApplicationDetailPage() {
   if (!app && applications.length === 0) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center py-32">
-          <div className="w-8 h-8 border-[3px] border-dark-accent border-t-transparent rounded-full animate-spin" />
+        <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 animate-pulse">
+          {/* Breadcrumb skeleton */}
+          <div className="h-4 w-48 bg-gray-100 dark:bg-dark-s2 rounded" />
+
+          {/* Title row skeleton */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gray-100 dark:bg-dark-s2 flex-shrink-0" />
+            <div className="space-y-2">
+              <div className="h-6 sm:h-8 w-40 sm:w-56 bg-gray-100 dark:bg-dark-s2 rounded" />
+              <div className="h-3.5 w-28 bg-gray-100 dark:bg-dark-s2 rounded" />
+            </div>
+          </div>
+
+          {/* Content skeleton */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
+            <div className="lg:col-span-2 space-y-4 sm:space-y-5">
+              <div className="h-48 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+              <div className="h-32 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+              <div className="h-32 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+            </div>
+            <div className="space-y-4 sm:space-y-5">
+              <div className="h-40 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+              <div className="h-28 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+              <div className="h-28 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+            </div>
+          </div>
         </div>
       </DashboardLayout>
     );

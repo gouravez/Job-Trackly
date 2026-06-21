@@ -23,7 +23,7 @@ export default function CalendarDayCell({
         onSelect(cell.date === selectedDay ? null : cell.date)
       }
       className={cn(
-        "min-h-[88px] p-2 border-b border-r border-gray-50 dark:border-dark-s2 transition-colors",
+        "min-h-[56px] sm:min-h-[88px] p-1 sm:p-2 border-b border-r border-gray-50 dark:border-dark-s2 transition-colors",
         cell.current &&
           "cursor-pointer hover:bg-gray-50/70 dark:hover:bg-dark-s2",
         !cell.current && "bg-gray-50/30 dark:bg-dark-bg/30",
@@ -35,7 +35,7 @@ export default function CalendarDayCell({
       <div className="flex items-center justify-end mb-1">
         <span
           className={cn(
-            "w-6 h-6 flex items-center justify-center rounded-full text-xs font-semibold",
+            "w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center rounded-full text-[11px] sm:text-xs font-semibold",
             isToday
               ? "bg-dark-accent text-white"
               : cell.current
@@ -47,8 +47,10 @@ export default function CalendarDayCell({
         </span>
       </div>
 
-      {/* Event chips */}
-      <div className="space-y-0.5">
+      {/* Event chips — full chip w/ label on sm+, just colored dots on
+          mobile since a ~40px-wide cell can't fit readable chip text;
+          tapping the cell still surfaces full details in the day panel */}
+      <div className="hidden sm:block space-y-0.5">
         {events.slice(0, MAX_CHIPS).map((ev, j) => {
           const chip = STATUS_CHIP[ev.eventType] || STATUS_CHIP.Applied;
           return (
@@ -74,6 +76,21 @@ export default function CalendarDayCell({
           </div>
         )}
       </div>
+
+      {events.length > 0 && (
+        <div className="sm:hidden flex flex-wrap justify-end gap-0.5">
+          {events.slice(0, 4).map((ev, j) => {
+            const chip = STATUS_CHIP[ev.eventType] || STATUS_CHIP.Applied;
+            return (
+              <span
+                key={j}
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ backgroundColor: chip.dot }}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

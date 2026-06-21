@@ -16,7 +16,7 @@ const LEGEND = [
 ]
 
 export default function CalendarPage() {
-  const applications = useAppStore((s) => s.applications)
+  const { applications, fetchApplications, isLoading } = useAppStore()
 
   const {
     year, month, prevMonth, nextMonth,
@@ -26,6 +26,13 @@ export default function CalendarPage() {
   } = useCalendarStore()
 
   const todayStr = new Date().toISOString().slice(0, 10)
+
+  // If the store is empty (direct nav/refresh on this page), fetch first —
+  // every other page does this, but Calendar previously relied entirely on
+  // another page having already populated the shared store.
+  useEffect(() => {
+    if (applications.length === 0) fetchApplications()
+  }, [])
 
   // Re-derive eventMap whenever applications change
   useEffect(() => {
@@ -50,6 +57,30 @@ export default function CalendarPage() {
     }
     return result.slice(0, 8)
   }, [eventMap])
+
+  // ── Loading state ──────────────────────────────────────────────────────
+  if (isLoading && applications.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="p-4 sm:p-6 lg:p-8 space-y-5 animate-pulse">
+          <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <div className="h-7 sm:h-8 w-32 bg-gray-100 dark:bg-dark-s2 rounded" />
+              <div className="h-3.5 w-56 bg-gray-100 dark:bg-dark-s2 rounded" />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">
+            <div className="xl:col-span-3 h-[480px] bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+            <div className="space-y-4">
+              <div className="h-32 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+              <div className="h-48 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+              <div className="h-32 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+            </div>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
+  }
 
   return (
     <DashboardLayout>

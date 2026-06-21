@@ -56,24 +56,24 @@ export default function AnalyticsStatCards() {
   }, [applications]);
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {stats.map((s) => (
         <div
           key={s.label}
-          className="bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border shadow-sm p-5"
+          className="bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border shadow-sm p-4 sm:p-5"
         >
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-gray-500 dark:text-dark-tx2">
               {s.label}
             </span>
             <div
-              className={`w-8 h-8 rounded-lg ${s.iconBg} flex items-center justify-center`}
+              className={`w-8 h-8 rounded-lg ${s.iconBg} flex items-center justify-center flex-shrink-0`}
             >
               <s.icon size={15} className={s.iconColor} />
             </div>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-gray-900 dark:text-dark-tx1">
+            <span className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-dark-tx1">
               {s.value}
             </span>
           </div>

@@ -61,12 +61,12 @@ export default function MonthlyTrendsChart() {
   }, [applications]);
 
   return (
-    <div className="col-span-3 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border shadow-sm p-6">
-      <div className="flex items-center justify-between mb-4">
+    <div className="col-span-3 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border shadow-sm p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
         <h3 className="font-bold text-gray-900 dark:text-dark-tx1">
           Monthly Application Trends
         </h3>
-        <div className="flex items-center gap-4 text-xs text-gray-500">
+        <div className="flex items-center gap-3 sm:gap-4 text-xs text-gray-500 flex-wrap">
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-dark-accent" />{" "}
             Applications Sent

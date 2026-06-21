@@ -114,7 +114,7 @@ export default function AddApplicationModal({
 
       <div className="relative bg-white dark:bg-dark-s1 rounded-2xl shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         {/* ── Header ─────────────────────────────────────────────────────── */}
-        <div className="flex items-center justify-between px-7 pt-7 pb-5 border-b border-gray-100 dark:border-dark-border">
+        <div className="flex items-center justify-between px-4 sm:px-7 pt-7 pb-5 border-b border-gray-100 dark:border-dark-border">
           <h2 className="text-xl font-bold text-gray-900 dark:text-dark-tx1">
             {isEdit ? "Edit Application" : "Add New Application"}
           </h2>
@@ -127,7 +127,7 @@ export default function AddApplicationModal({
         </div>
 
         {/* ── Step tabs ──────────────────────────────────────────────────── */}
-        <div className="flex items-center gap-3 px-7 py-4 border-b border-gray-100 dark:border-dark-border">
+        <div className="flex flex-wrap items-center gap-3 px-4 sm:px-7 py-4 border-b border-gray-100 dark:border-dark-border">
           {[
             { n: 1, label: "Job Details" },
             { n: 2, label: "Resume & Contact" },
@@ -159,7 +159,7 @@ export default function AddApplicationModal({
         </div>
 
         {/* ── Form body ──────────────────────────────────────────────────── */}
-        <div className="px-7 py-6 space-y-5">
+        <div className="px-4 sm:px-7 py-6 space-y-5">
           {/* API error */}
           {saveError && (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl px-4 py-3">
@@ -172,7 +172,7 @@ export default function AddApplicationModal({
           {/* ── Step 1 — Job Details ──────────────────────────────────────── */}
           {step === 1 && (
             <>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Field label="Company Name">
                   <input
                     value={form.company}
@@ -206,7 +206,7 @@ export default function AddApplicationModal({
                 </div>
               </Field>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Field label="Status">
                   <div className="relative">
                     <select
@@ -239,7 +239,7 @@ export default function AddApplicationModal({
                 </Field>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Field label="Location">
                   <input
                     value={form.location}
@@ -261,7 +261,7 @@ export default function AddApplicationModal({
                 </Field>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Field label="Priority">
                   <div className="flex rounded-lg border border-gray-200 dark:border-dark-border overflow-hidden">
                     {["Low", "Medium", "High"].map((p) => {
@@ -438,7 +438,7 @@ export default function AddApplicationModal({
         </div>
 
         {/* ── Footer ─────────────────────────────────────────────────────── */}
-        <div className="flex items-center justify-between px-7 py-5 border-t border-gray-100 dark:border-dark-border">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-7 py-5 border-t border-gray-100 dark:border-dark-border">
           <button
             onClick={onClose}
             className="px-5 py-2.5 rounded-lg border border-gray-200 dark:border-dark-border text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-s2 transition-colors"

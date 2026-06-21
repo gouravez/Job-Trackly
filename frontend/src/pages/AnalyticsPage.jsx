@@ -49,8 +49,23 @@ export default function AnalyticsPage() {
 
         {/* Loading */}
         {isLoading && applications.length === 0 ? (
-          <div className="flex items-center justify-center py-24">
-            <div className="w-8 h-8 border-[3px] border-dark-accent border-t-transparent rounded-full animate-spin" />
+          <div className="space-y-4 sm:space-y-6 animate-pulse">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-32 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border"
+                />
+              ))}
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+              <div className="lg:col-span-3 h-64 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+              <div className="lg:col-span-2 h-64 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="h-56 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+              <div className="h-56 bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border" />
+            </div>
           </div>
         ) : (
           <>

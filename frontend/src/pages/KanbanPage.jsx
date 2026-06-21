@@ -15,7 +15,7 @@ const COLUMNS = [
 ]
 
 export default function KanbanPage() {
-  const { applications, fetchApplications, addApplication, moveApplication } = useAppStore()
+  const { applications, fetchApplications, addApplication, moveApplication, isLoading } = useAppStore()
   const [searchParams] = useSearchParams()
 
   const [search, setSearch]     = useState(searchParams.get('search') || '')
@@ -57,6 +57,32 @@ export default function KanbanPage() {
     setAddingTo(null)
   }
 
+  // ── Loading state ──────────────────────────────────────────────────────
+  // Without this, every column briefly renders "No applications" on the
+  // initial fetch, which reads as an empty board rather than a loading one.
+  if (isLoading && applications.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="flex flex-col h-screen overflow-hidden">
+          <KanbanHeader search={search} onSearch={setSearch} />
+          <div className="flex-1 overflow-x-auto overflow-y-hidden px-4 sm:px-8 pb-4 sm:pb-8 animate-pulse">
+            <div className="flex gap-3 sm:gap-4 h-full" style={{ minWidth: 'max-content' }}>
+              {COLUMNS.map((col) => (
+                <div key={col.key} className="w-[220px] flex-shrink-0 flex flex-col">
+                  <div className="h-12 rounded-xl bg-gray-100 dark:bg-dark-s2 mb-3" />
+                  <div className="flex-1 rounded-xl bg-gray-50/80 dark:bg-dark-s1/60 p-1.5 space-y-2.5">
+                    <div className="h-24 rounded-xl bg-gray-100 dark:bg-dark-s2" />
+                    <div className="h-24 rounded-xl bg-gray-100 dark:bg-dark-s2" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
   return (
     <DashboardLayout>
       <div className="flex flex-col h-screen overflow-hidden">
@@ -69,6 +95,7 @@ export default function KanbanPage() {
                 <KanbanColumn
                   col={col}
                   cards={byStatus(col.key)}
+                  columns={COLUMNS}
                   isOver={dragOver === col.key}
                   isAdding={addingTo === col.key}
                   onDragOver={(e) => { e.preventDefault(); setDragOver(col.key) }}
@@ -76,6 +103,7 @@ export default function KanbanPage() {
                   onDrop={(e) => handleDrop(e, col.key)}
                   onAddCard={handleAddCard}
                   onToggleAdd={setAddingTo}
+                  onMove={moveApplication}
                 />
               </div>
             ))}

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { MoreHorizontal, Calendar } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { MoreHorizontal, Calendar, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const PRIORITY_STYLES = {
@@ -32,10 +32,24 @@ function Avatar({ name }) {
   );
 }
 
-export default function KanbanCard({ app }) {
+export default function KanbanCard({ app, columns, onMove }) {
   const [dragging, setDragging] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
   const hasInterview = app.status === "Interview";
   const dateShort = app.dateApplied?.slice(0, 7);
+
+  // Close the move-to menu on outside click
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [menuOpen]);
 
   return (
     <div
@@ -46,7 +60,7 @@ export default function KanbanCard({ app }) {
       }}
       onDragEnd={() => setDragging(false)}
       className={cn(
-        "bg-white dark:bg-dark-s2 rounded-xl border border-gray-200 dark:border-dark-border p-3.5 shadow-sm dark:shadow-none",
+        "relative bg-white dark:bg-dark-s2 rounded-xl border border-gray-200 dark:border-dark-border p-3.5 shadow-sm dark:shadow-none",
         "hover:shadow-md dark:hover:border-dark-border2 hover:-translate-y-0.5 transition-all duration-150",
         "cursor-grab active:cursor-grabbing group",
         dragging && "opacity-40 rotate-1 scale-95",
@@ -59,9 +73,48 @@ export default function KanbanCard({ app }) {
             {app.company}
           </p>
         </div>
-        <button className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 dark:text-dark-tx3 hover:text-gray-700 dark:hover:text-dark-tx2 ml-1 flex-shrink-0">
-          <MoreHorizontal size={14} />
-        </button>
+
+        <div className="relative flex-shrink-0" ref={menuRef}>
+          <button
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label="Move card"
+            className={cn(
+              "transition-opacity text-gray-400 dark:text-dark-tx3 hover:text-gray-700 dark:hover:text-dark-tx2 ml-1 p-0.5",
+              // Always visible on touch (no hover state); fades in on hover for mouse users
+              menuOpen ? "opacity-100" : "opacity-100 sm:opacity-0 sm:group-hover:opacity-100",
+            )}
+          >
+            <MoreHorizontal size={14} />
+          </button>
+
+          {/* Move-to menu — the only working way to change status on touch
+              devices, since native HTML5 drag-and-drop doesn't fire there */}
+          {menuOpen && (
+            <div className="absolute right-0 top-6 z-20 w-44 bg-white dark:bg-dark-s1 border border-gray-200 dark:border-dark-border rounded-xl shadow-lg py-1.5">
+              <p className="px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-dark-tx3">
+                Move to
+              </p>
+              {columns?.map((col) => (
+                <button
+                  key={col.key}
+                  onClick={() => {
+                    if (col.key !== app.status) onMove?.(app.id, col.key);
+                    setMenuOpen(false);
+                  }}
+                  className="flex items-center justify-between w-full px-3 py-1.5 text-sm text-left text-gray-700 dark:text-dark-tx2 hover:bg-gray-50 dark:hover:bg-dark-s2"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className={`w-1.5 h-1.5 rounded-full ${col.dot}`} />
+                    {col.label}
+                  </span>
+                  {col.key === app.status && (
+                    <Check size={13} className="text-dark-accent dark:text-dark-accent3" />
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <p className="text-xs text-gray-500 dark:text-dark-tx2 mb-3 leading-snug">

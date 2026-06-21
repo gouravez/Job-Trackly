@@ -9,7 +9,7 @@ export default function KanbanHeader({ search, onSearch }) {
             Kanban Board
           </h1>
           <p className="text-gray-400 dark:text-dark-tx3 mt-0.5 text-sm">
-            Drag and drop to update application status
+            Drag and drop, or tap a card's menu to update its status
           </p>
         </div>
 

@@ -52,19 +52,21 @@ export default function ApplicationFunnel() {
           No applications yet
         </p>
       ) : (
-        <div className="space-y-1">
+        <div className="space-y-3">
           {funnel.map((f) => (
             <div key={f.key}>
-              <div
-                className="flex items-center justify-between text-white text-sm font-semibold px-4 py-3 rounded-xl transition-all"
-                style={{
-                  backgroundColor: f.color,
-                  width: f.width,
-                  minWidth: "80px",
-                }}
-              >
+              <div className="flex items-center justify-between text-sm font-semibold text-gray-700 dark:text-dark-tx1 mb-1.5">
                 <span>{f.key}</span>
                 <span>{f.count}</span>
+              </div>
+              <div className="h-2.5 rounded-full bg-gray-100 dark:bg-dark-s2 overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all"
+                  style={{
+                    backgroundColor: f.color,
+                    width: f.count > 0 ? f.width : "0%",
+                  }}
+                />
               </div>
               {f.dropPct && (
                 <p className="text-xs text-gray-400 text-center py-1.5">

@@ -23,15 +23,15 @@ export default function JobDetailsCard({
         {details.map(({ icon: Icon, label, value }) => (
           <div
             key={label}
-            className="flex items-center justify-between py-2 border-b border-gray-50 dark:border-dark-s2 last:border-0"
+            className="flex items-start justify-between gap-3 py-2 border-b border-gray-50 dark:border-dark-s2 last:border-0"
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-shrink-0">
               <Icon size={14} className="text-gray-400 dark:text-dark-tx3" />
               <span className="text-sm text-gray-500 dark:text-dark-tx2">
                 {label}
               </span>
             </div>
-            <span className="text-sm font-semibold text-gray-800 dark:text-dark-tx1">
+            <span className="text-sm font-semibold text-gray-800 dark:text-dark-tx1 text-right break-words">
               {value}
             </span>
           </div>

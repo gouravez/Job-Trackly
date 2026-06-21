@@ -6,6 +6,7 @@ import QuickAddForm from "./QuickAddForm";
 export default function KanbanColumn({
   col,
   cards,
+  columns,
   isOver,
   isAdding,
   onDragOver,
@@ -13,6 +14,7 @@ export default function KanbanColumn({
   onDrop,
   onAddCard,
   onToggleAdd,
+  onMove,
 }) {
   return (
     <div
@@ -66,7 +68,7 @@ export default function KanbanColumn({
         )}
 
         {cards.map((app) => (
-          <KanbanCard key={app.id} app={app} />
+          <KanbanCard key={app.id} app={app} columns={columns} onMove={onMove} />
         ))}
       </div>
 

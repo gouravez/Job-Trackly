@@ -146,9 +146,22 @@ export default function ApplicationsPage() {
 
         {/* Loading skeleton */}
         {isLoading && applications.length === 0 ? (
-          <div className="bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border shadow-sm p-12 text-center">
-            <div className="w-8 h-8 border-[3px] border-dark-accent border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-            <p className="text-sm text-gray-400">Loading applications…</p>
+          <div className="bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border shadow-sm overflow-hidden animate-pulse">
+            {Array.from({ length: ROWS_PER_PAGE }).map((_, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between gap-4 px-5 py-3.5 border-b border-gray-50 dark:border-dark-s2 last:border-b-0"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-dark-s2 flex-shrink-0" />
+                  <div className="h-3.5 w-24 sm:w-32 bg-gray-100 dark:bg-dark-s2 rounded" />
+                </div>
+                <div className="hidden md:block h-3.5 w-28 bg-gray-100 dark:bg-dark-s2 rounded" />
+                <div className="hidden md:block h-3.5 w-20 bg-gray-100 dark:bg-dark-s2 rounded" />
+                <div className="h-5 w-16 bg-gray-100 dark:bg-dark-s2 rounded-full" />
+                <div className="hidden md:block h-3.5 w-16 bg-gray-100 dark:bg-dark-s2 rounded" />
+              </div>
+            ))}
           </div>
         ) : filtered.length === 0 ? (
           <div className="bg-white dark:bg-dark-s1 rounded-2xl border border-gray-100 dark:border-dark-border shadow-sm p-12 text-center">
