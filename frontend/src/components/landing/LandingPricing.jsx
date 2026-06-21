@@ -2,7 +2,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { CheckCircle2, Sparkles } from "lucide-react";
 import Button from "@/components/ui/Button.jsx";
 import { Reveal } from "@/effects/GlobalEffects.jsx";
-import { PRICING_PLANS } from "@/components/landing/landingData.js";
+import { PRICING_PLANS } from "@/components/landing/Landingdata.js";
 
 export default function LandingPricing() {
   return (

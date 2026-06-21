@@ -1,5 +1,5 @@
 import { Reveal } from "@/effects/GlobalEffects.jsx";
-import { HOW_IT_WORKS } from "@/components/landing/landingData.js";
+import { HOW_IT_WORKS } from "@/components/landing/Landingdata.js";
 
 export default function LandingHowItWorks() {
   return (

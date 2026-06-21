@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Reveal } from "@/effects/GlobalEffects.jsx";
-import { FEATURES } from "@/components/landing/landingData.js";
+import { FEATURES } from "@/components/landing/Landingdata.js";
 
 const AUTO_ADVANCE_MS = 4000;
 // How many cards are visible at once (desktop). On mobile we show 1.

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { STATS } from "@/components/landing/landingData.js";
+import { STATS } from "@/components/landing/Landingdata.js";
 
 // ─── StatsSection — observer triggers children directly ───────────────────────
 export default function LandingStats() {
@@ -16,7 +16,7 @@ export default function LandingStats() {
           observer.unobserve(container);
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
     observer.observe(container);
     return () => observer.disconnect();
@@ -24,7 +24,10 @@ export default function LandingStats() {
 
   return (
     <section className="bg-gray-50 border-y border-gray-100">
-      <div ref={ref} className="max-w-5xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div
+        ref={ref}
+        className="max-w-5xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-8"
+      >
         {STATS.map((s) => (
           <div
             key={s.label}
@@ -32,7 +35,9 @@ export default function LandingStats() {
             style={{ opacity: 0 }}
             className="text-center"
           >
-            <div className="text-4xl font-extrabold text-gray-900 tracking-tight">{s.value}</div>
+            <div className="text-4xl font-extrabold text-gray-900 tracking-tight">
+              {s.value}
+            </div>
             <div className="text-sm text-gray-500 mt-1">{s.label}</div>
           </div>
         ))}

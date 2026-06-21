@@ -1,5 +1,5 @@
 import { Reveal } from "@/effects/GlobalEffects.jsx";
-import { STUDENT_CARDS } from "@/components/landing/landingData.js";
+import { STUDENT_CARDS } from "@/components/landing/Landingdata.js";
 
 export default function LandingStudents() {
   return (
