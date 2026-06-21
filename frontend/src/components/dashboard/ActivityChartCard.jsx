@@ -73,12 +73,6 @@ export default function ActivityChartCard() {
           data={chartData}
           margin={{ top: 10, right: 0, left: -20, bottom: 0 }}
         >
-          <defs>
-            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3d66e8" stopOpacity={0.25} />
-              <stop offset="95%" stopColor="#3d66e8" stopOpacity={0} />
-            </linearGradient>
-          </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(37,42,58,0.6)" />
           <XAxis
             dataKey="month"
@@ -107,7 +101,8 @@ export default function ActivityChartCard() {
             dataKey="apps"
             stroke="#3d66e8"
             strokeWidth={2.5}
-            fill="url(#areaGrad)"
+            fill="#3d66e8"
+            fillOpacity={0.15}
             dot={false}
           />
         </AreaChart>

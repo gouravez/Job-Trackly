@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import {
   Users, Plus, Search, Linkedin, Mail, Phone, Briefcase,
   Star, Pencil, Trash2, X, Link2, Unlink, ChevronDown, ExternalLink,
@@ -377,9 +378,12 @@ function ContactCard({ referral, onEdit, onDelete, onLink }) {
 export default function ReferralPage() {
   const { referrals, isLoading, fetchReferrals, removeReferral } = useReferralStore()
   const { applications, fetchApplications } = useAppStore()
+  const [searchParams] = useSearchParams()
 
-  const [search,    setSearch]    = useState('')
-  const [relFilter, setRelFilter] = useState('All')
+  const initialRel = searchParams.get('relationship')
+
+  const [search,    setSearch]    = useState(searchParams.get('search') || '')
+  const [relFilter, setRelFilter] = useState(RELATIONSHIPS.includes(initialRel) ? initialRel : 'All')
   const [modal,     setModal]     = useState({ open: false, initial: null })
   const [linkModal, setLinkModal] = useState({ open: false, referral: null })
   const [delTarget, setDelTarget] = useState(null)
@@ -388,6 +392,15 @@ export default function ReferralPage() {
     fetchReferrals()
     if (!applications.length) fetchApplications()
   }, [])
+
+  // Keep filters in sync if the URL changes (e.g. another search via the
+  // global search bar while already on this page)
+  useEffect(() => {
+    const rel = searchParams.get('relationship')
+    const q = searchParams.get('search')
+    if (RELATIONSHIPS.includes(rel) && rel !== relFilter) setRelFilter(rel)
+    if (q != null && q !== search) setSearch(q)
+  }, [searchParams])
 
   const filtered = referrals.filter(r => {
     const q = search.toLowerCase()
@@ -426,7 +439,7 @@ export default function ReferralPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
+        <div id="referral-stats" className="scroll-mt-20 grid grid-cols-3 gap-3 mb-6">
           {[
             { label: 'Total Contacts', value: referrals.length, color: 'text-dark-tx1' },
             { label: 'Strong Connections', value: strongCount, color: 'text-status-green' },

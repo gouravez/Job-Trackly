@@ -54,16 +54,26 @@ export default function AnalyticsPage() {
           </div>
         ) : (
           <>
-            <AnalyticsStatCards />
+            <div id="analytics-stats" className="scroll-mt-20">
+              <AnalyticsStatCards />
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-              <MonthlyTrendsChart />
-              <StatusBreakdownChart />
+              <div id="monthly-trends" className="scroll-mt-20 lg:col-span-3">
+                <MonthlyTrendsChart />
+              </div>
+              <div id="status-breakdown" className="scroll-mt-20 lg:col-span-2">
+                <StatusBreakdownChart />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ApplicationFunnel />
-              <TopCompaniesChart />
+              <div id="funnel" className="scroll-mt-20">
+                <ApplicationFunnel />
+              </div>
+              <div id="top-companies" className="scroll-mt-20">
+                <TopCompaniesChart />
+              </div>
             </div>
           </>
         )}

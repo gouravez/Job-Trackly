@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { validate }  from '../middleware/validate.middleware.js'
 import { protect }   from '../middleware/auth.middleware.js'
+import { otpLimiter, signinLimiter, resetLimiter } from '../middleware/rateLimiter.middleware.js'
 import { signupSchema, signinSchema, forgotPasswordSchema, resetPasswordSchema } from '../schemas/auth.schema.js'
 import { z } from 'zod'
 import {
@@ -18,7 +19,8 @@ const router = Router()
 // ── OTP ───────────────────────────────────────────────────────────────────────
 const sendOtpSchema = z.object({ email: z.string().email() })
 
-router.post('/send-otp', validate(sendOtpSchema), async (req, res, next) => {
+// otpLimiter: 5 req / 15 min — prevents using this endpoint to spam emails
+router.post('/send-otp', otpLimiter, validate(sendOtpSchema), async (req, res, next) => {
   try {
     const result = await sendOtp(req.body.email)
     res.json({ success: true, ...result })
@@ -27,14 +29,20 @@ router.post('/send-otp', validate(sendOtpSchema), async (req, res, next) => {
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 router.post('/signup',  validate(signupSchema),  signupController)
-router.post('/signin',  validate(signinSchema),  signinController)
+
+// signinLimiter: 10 req / 15 min — brute-force protection
+router.post('/signin',  signinLimiter, validate(signinSchema),  signinController)
+
 router.post('/signout', signoutController)
 
 // Protected
 router.get('/me', protect, getMeController)
 
 // ── Password reset ────────────────────────────────────────────────────────────
-router.post('/forgot-password', validate(forgotPasswordSchema), forgotPasswordController)
-router.post('/reset-password',  validate(resetPasswordSchema),  resetPasswordController)
+// otpLimiter: same 5 req / 15 min as send-otp — prevents email spam
+router.post('/forgot-password', otpLimiter, validate(forgotPasswordSchema), forgotPasswordController)
+
+// resetLimiter: 5 req / 15 min — OTP already expires but cap submissions too
+router.post('/reset-password',  resetLimiter, validate(resetPasswordSchema),  resetPasswordController)
 
 export default router

@@ -164,7 +164,7 @@ export default function ApplicationDetailPage() {
               salary={app.salary}
               dateApplied={app.dateApplied}
             />
-            <ResumeCard />
+            <ResumeCard applicationId={app.id} />
             <ContactCard />
           </div>
         </div>

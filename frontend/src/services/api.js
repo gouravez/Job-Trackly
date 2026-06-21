@@ -84,4 +84,23 @@ export const referralService = {
   unlinkApplication:(id, appId)            => api.delete(`/referrals/${id}/link/${appId}`),
 }
 
+// ---------------------------------------------------------------------------
+// Resume endpoints
+// ---------------------------------------------------------------------------
+export const resumeService = {
+  // Upload — multipart/form-data, not JSON
+  upload: (formData) =>
+    api.post('/resumes', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+
+  list:            (applicationId) =>
+    api.get('/resumes', { params: applicationId ? { applicationId } : {} }),
+
+  getOne:          (id)            => api.get(`/resumes/${id}`),
+  remove:          (id)            => api.delete(`/resumes/${id}`),
+  linkToApp:       (id, applicationId) =>
+    api.patch(`/resumes/${id}/link`, { applicationId }),
+}
+
 export default api

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Plus } from "lucide-react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import ApplicationsFilters from "@/components/applications/ApplicationsFilters";
@@ -9,6 +10,7 @@ import ConfirmDialog from "@/components/common/ConfirmDialog";
 import useAppStore from "@/store/appStore";
 
 const ROWS_PER_PAGE = 8;
+const VALID_STATUSES = ["Saved", "Applied", "Assessment", "Interview", "Offer", "Rejected"];
 
 export default function ApplicationsPage() {
   const {
@@ -19,8 +21,16 @@ export default function ApplicationsPage() {
     isLoading,
   } = useAppStore();
 
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Allow deep-linking from global search, e.g. /applications?status=Interview&search=google
+  const initialStatus = searchParams.get("status");
+  const initialSearch = searchParams.get("search") || "";
+
+  const [search, setSearch] = useState(initialSearch);
+  const [statusFilter, setStatusFilter] = useState(
+    VALID_STATUSES.includes(initialStatus) ? initialStatus : "All"
+  );
   const [showModal, setShowModal] = useState(false);
   const [page, setPage] = useState(1);
   const [saveError, setSaveError] = useState("");
@@ -31,6 +41,21 @@ export default function ApplicationsPage() {
   useEffect(() => {
     if (applications.length === 0) fetchApplications();
   }, []);
+
+  // Keep filters in sync if the URL changes (e.g. another search via the
+  // global search bar while already on this page)
+  useEffect(() => {
+    const s = searchParams.get("status");
+    const q = searchParams.get("search");
+    if (VALID_STATUSES.includes(s) && s !== statusFilter) {
+      setStatusFilter(s);
+      setPage(1);
+    }
+    if (q != null && q !== search) {
+      setSearch(q);
+      setPage(1);
+    }
+  }, [searchParams]);
 
   const filtered = applications.filter((a) => {
     const q = search.toLowerCase();
@@ -55,6 +80,11 @@ export default function ApplicationsPage() {
   const handleStatusFilter = (val) => {
     setStatusFilter(val);
     setPage(1);
+    // Reflect the filter in the URL so it stays linkable/shareable
+    const next = new URLSearchParams(searchParams);
+    if (val === "All") next.delete("status");
+    else next.set("status", val);
+    setSearchParams(next, { replace: true });
   };
 
   // addApplication now calls the real API — no fake id needed

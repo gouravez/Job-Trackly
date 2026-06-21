@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import KanbanHeader from '@/components/kanban/KanbanHeader'
 import KanbanColumn from '@/components/kanban/KanbanColumn'
@@ -15,12 +16,28 @@ const COLUMNS = [
 
 export default function KanbanPage() {
   const { applications, fetchApplications, addApplication, moveApplication } = useAppStore()
+  const [searchParams] = useSearchParams()
 
-  const [search, setSearch]     = useState('')
+  const [search, setSearch]     = useState(searchParams.get('search') || '')
   const [dragOver, setDragOver] = useState(null)
   const [addingTo, setAddingTo] = useState(null)
 
   useEffect(() => { fetchApplications() }, [fetchApplications])
+
+  // If linked here with ?status=Interview, scroll that column into view
+  useEffect(() => {
+    const status = searchParams.get('status')
+    if (!status) return
+    const t = setTimeout(() => {
+      const el = document.getElementById(`kanban-${status}`)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+        el.classList.add('search-highlight')
+        setTimeout(() => el.classList.remove('search-highlight'), 1500)
+      }
+    }, 150)
+    return () => clearTimeout(t)
+  }, [searchParams])
 
   const filtered = applications.filter((a) => {
     const q = search.toLowerCase()
@@ -48,18 +65,19 @@ export default function KanbanPage() {
         <div className="flex-1 overflow-x-auto overflow-y-hidden px-4 sm:px-8 pb-4 sm:pb-8">
           <div className="flex gap-3 sm:gap-4 h-full" style={{ minWidth: 'max-content' }}>
             {COLUMNS.map((col) => (
-              <KanbanColumn
-                key={col.key}
-                col={col}
-                cards={byStatus(col.key)}
-                isOver={dragOver === col.key}
-                isAdding={addingTo === col.key}
-                onDragOver={(e) => { e.preventDefault(); setDragOver(col.key) }}
-                onDragLeave={() => setDragOver(null)}
-                onDrop={(e) => handleDrop(e, col.key)}
-                onAddCard={handleAddCard}
-                onToggleAdd={setAddingTo}
-              />
+              <div key={col.key} id={`kanban-${col.key}`} className="scroll-mt-20 flex w-[220px] flex-shrink-0">
+                <KanbanColumn
+                  col={col}
+                  cards={byStatus(col.key)}
+                  isOver={dragOver === col.key}
+                  isAdding={addingTo === col.key}
+                  onDragOver={(e) => { e.preventDefault(); setDragOver(col.key) }}
+                  onDragLeave={() => setDragOver(null)}
+                  onDrop={(e) => handleDrop(e, col.key)}
+                  onAddCard={handleAddCard}
+                  onToggleAdd={setAddingTo}
+                />
+              </div>
             ))}
           </div>
         </div>

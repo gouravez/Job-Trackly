@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import { protect }         from '../middleware/auth.middleware.js'
+import { validate }        from '../middleware/validate.middleware.js'
 import { uploadResume }    from '../lib/multer.js'
+import { linkResumeSchema } from '../schemas/resume.schema.js'
 import {
   upload,
   list,
@@ -24,6 +26,6 @@ router.post('/',           uploadResume.single('resume'), upload)
 router.get('/',            list)
 router.get('/:id',         getOne)
 router.delete('/:id',      remove)
-router.patch('/:id/link',  linkToApplication)
+router.patch('/:id/link',  validate(linkResumeSchema), linkToApplication)
 
 export default router

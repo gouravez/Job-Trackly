@@ -7,11 +7,7 @@ export default function AuthLayout({ children, headline, subline, features }) {
     <div className="min-h-screen flex">
       {/* ── Left panel ────────────────────────────────────────────── */}
       <div
-        className="hidden lg:flex lg:w-[45%] xl:w-[40%] flex-col justify-between p-10 xl:p-14"
-        style={{
-          background:
-            "linear-gradient(145deg, #e8ecf5 0%, #d8e0ef 50%, #c4cfea 100%)",
-        }}
+        className="hidden lg:flex lg:w-[45%] xl:w-[40%] flex-col justify-between p-10 xl:p-14 bg-light-auth-2"
       >
         <Logo size="md" />
 

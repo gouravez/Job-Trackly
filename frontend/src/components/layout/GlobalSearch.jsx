@@ -79,19 +79,67 @@ const REFERRAL_FIELDS = [
   { key: 'notes',        label: 'Notes' },
 ]
 
-// Static, searchable list of every page in the app
+// Static, searchable index of every page AND in-page section across the app.
+// `to` may include a hash (#section -> scrolled into view) or query params
+// (e.g. ?status=Interview, ?relationship=Recruiter, ?tab=notifications) which
+// the destination pages read to pre-apply filters / open the right tab.
 const PAGES = [
-  { label: 'Dashboard',        keywords: 'dashboard home overview stats summary', to: '/dashboard', icon: LayoutDashboard },
-  { label: 'Applications',     keywords: 'applications jobs job list table tracker', to: '/applications', icon: FileText },
-  { label: 'Kanban Board',      keywords: 'kanban board pipeline drag drop stages', to: '/kanban', icon: Columns3 },
-  { label: 'Calendar',         keywords: 'calendar schedule events interviews reminders follow up', to: '/calendar', icon: CalendarDays },
-  { label: 'Referral Network',  keywords: 'referrals contacts network people connections referral', to: '/referrals', icon: Users },
-  { label: 'Analytics',        keywords: 'analytics charts stats trends funnel insights', to: '/analytics', icon: BarChart2 },
-  { label: 'Settings',         keywords: 'settings preferences', to: '/settings', icon: Settings },
-  { label: 'Profile Settings',       keywords: 'settings profile name email bio avatar university graduation resume', to: '/settings?tab=profile', icon: User },
-  { label: 'Appearance Settings',    keywords: 'settings appearance theme dark light mode color', to: '/settings?tab=appearance', icon: Palette },
-  { label: 'Notification Settings',  keywords: 'settings notifications notification email alerts reminders follow up', to: '/settings?tab=notifications', icon: Bell },
-  { label: 'Account Settings',       keywords: 'settings account password security delete sign out logout', to: '/settings?tab=account', icon: Shield },
+  // Dashboard
+  { label: 'Dashboard',            page: 'Dashboard', keywords: 'dashboard home overview', to: '/dashboard', icon: LayoutDashboard },
+  { label: 'Application Stats',    page: 'Dashboard', keywords: 'stats summary totals counts overview cards', to: '/dashboard#stats', icon: LayoutDashboard },
+  { label: 'Activity Chart',       page: 'Dashboard', keywords: 'activity chart graph applications over time trend', to: '/dashboard#activity-chart', icon: BarChart2 },
+  { label: 'Follow-ups',           page: 'Dashboard', keywords: 'follow up reminders upcoming tasks', to: '/dashboard#follow-ups', icon: Bell },
+  { label: 'Recent Applications',  page: 'Dashboard', keywords: 'recent applications latest activity', to: '/dashboard#recent-applications', icon: FileText },
+
+  // Applications
+  { label: 'Applications',           page: 'Applications', keywords: 'applications jobs job list table tracker all', to: '/applications', icon: FileText },
+  { label: 'Saved Applications',     page: 'Applications', keywords: 'saved applications wishlist bookmarked jobs', to: '/applications?status=Saved', icon: FileText },
+  { label: 'Applied Applications',   page: 'Applications', keywords: 'applied applications submitted jobs', to: '/applications?status=Applied', icon: FileText },
+  { label: 'Assessment Applications',page: 'Applications', keywords: 'assessment applications test screening', to: '/applications?status=Assessment', icon: FileText },
+  { label: 'Interview Applications', page: 'Applications', keywords: 'interview applications interviewing scheduled', to: '/applications?status=Interview', icon: FileText },
+  { label: 'Offer Applications',     page: 'Applications', keywords: 'offer applications offers received', to: '/applications?status=Offer', icon: FileText },
+  { label: 'Rejected Applications',  page: 'Applications', keywords: 'rejected applications declined rejections', to: '/applications?status=Rejected', icon: FileText },
+
+  // Kanban Board
+  { label: 'Kanban Board',       page: 'Kanban Board', keywords: 'kanban board pipeline drag drop stages', to: '/kanban', icon: Columns3 },
+  { label: 'Saved Column',       page: 'Kanban Board', keywords: 'kanban saved column wishlist', to: '/kanban?status=Saved', icon: Columns3 },
+  { label: 'Applied Column',     page: 'Kanban Board', keywords: 'kanban applied column', to: '/kanban?status=Applied', icon: Columns3 },
+  { label: 'Assessment Column',  page: 'Kanban Board', keywords: 'kanban assessment column test', to: '/kanban?status=Assessment', icon: Columns3 },
+  { label: 'Interview Column',   page: 'Kanban Board', keywords: 'kanban interview column', to: '/kanban?status=Interview', icon: Columns3 },
+  { label: 'Offer Column',       page: 'Kanban Board', keywords: 'kanban offer column', to: '/kanban?status=Offer', icon: Columns3 },
+  { label: 'Rejected Column',    page: 'Kanban Board', keywords: 'kanban rejected column', to: '/kanban?status=Rejected', icon: Columns3 },
+
+  // Calendar
+  { label: 'Calendar',           page: 'Calendar', keywords: 'calendar schedule events month view', to: '/calendar', icon: CalendarDays },
+  { label: 'Calendar Grid',      page: 'Calendar', keywords: 'calendar month view grid days', to: '/calendar#calendar-grid', icon: CalendarDays },
+  { label: 'Upcoming Events',    page: 'Calendar', keywords: 'upcoming events interviews follow ups reminders next two weeks', to: '/calendar#upcoming-events', icon: Bell },
+  { label: 'Month Stats',        page: 'Calendar', keywords: 'calendar month stats summary this month totals', to: '/calendar#month-stats', icon: BarChart2 },
+  { label: 'Google Calendar Sync', page: 'Calendar', keywords: 'google calendar sync integration connect import export', to: '/calendar#google-calendar', icon: CalendarDays },
+
+  // Referral Network
+  { label: 'Referral Network',     page: 'Referral Network', keywords: 'referrals contacts network people connections all', to: '/referrals', icon: Users },
+  { label: 'Referral Stats',       page: 'Referral Network', keywords: 'referral stats total contacts strong connections linked applications', to: '/referrals#referral-stats', icon: BarChart2 },
+  { label: 'Colleague Contacts',   page: 'Referral Network', keywords: 'colleague contacts coworkers', to: '/referrals?relationship=Colleague', icon: Users },
+  { label: 'Friend Contacts',      page: 'Referral Network', keywords: 'friend contacts friends', to: '/referrals?relationship=Friend', icon: Users },
+  { label: 'Alumni Contacts',      page: 'Referral Network', keywords: 'alumni contacts university college school', to: '/referrals?relationship=Alumni', icon: Users },
+  { label: 'Recruiter Contacts',   page: 'Referral Network', keywords: 'recruiter contacts recruiters hiring talent', to: '/referrals?relationship=Recruiter', icon: Users },
+  { label: 'Manager Contacts',     page: 'Referral Network', keywords: 'manager contacts managers boss', to: '/referrals?relationship=Manager', icon: Users },
+  { label: 'Mentor Contacts',      page: 'Referral Network', keywords: 'mentor contacts mentors', to: '/referrals?relationship=Mentor', icon: Users },
+
+  // Analytics
+  { label: 'Analytics',          page: 'Analytics', keywords: 'analytics charts insights overview performance', to: '/analytics', icon: BarChart2 },
+  { label: 'Analytics Stats',    page: 'Analytics', keywords: 'analytics stats summary totals overview cards', to: '/analytics#analytics-stats', icon: BarChart2 },
+  { label: 'Monthly Trends',     page: 'Analytics', keywords: 'monthly trends chart over time applications per month', to: '/analytics#monthly-trends', icon: BarChart2 },
+  { label: 'Status Breakdown',   page: 'Analytics', keywords: 'status breakdown pie chart distribution', to: '/analytics#status-breakdown', icon: BarChart2 },
+  { label: 'Application Funnel', page: 'Analytics', keywords: 'application funnel conversion stages', to: '/analytics#funnel', icon: BarChart2 },
+  { label: 'Top Companies',      page: 'Analytics', keywords: 'top companies most applied to', to: '/analytics#top-companies', icon: BarChart2 },
+
+  // Settings
+  { label: 'Settings',               page: 'Settings', keywords: 'settings preferences', to: '/settings', icon: Settings },
+  { label: 'Profile Settings',       page: 'Settings', keywords: 'profile name email bio avatar university graduation resume', to: '/settings?tab=profile', icon: User },
+  { label: 'Appearance Settings',    page: 'Settings', keywords: 'appearance theme dark light mode color', to: '/settings?tab=appearance', icon: Palette },
+  { label: 'Notification Settings',  page: 'Settings', keywords: 'notifications notification email alerts reminders follow up', to: '/settings?tab=notifications', icon: Bell },
+  { label: 'Account Settings',       page: 'Settings', keywords: 'account password security delete sign out logout', to: '/settings?tab=account', icon: Shield },
 ]
 
 const CATEGORY_ORDER = ['page', 'application', 'referral']
@@ -151,14 +199,19 @@ export default function GlobalSearch() {
     const q = query.trim().toLowerCase()
     if (!q) return []
 
-    // Pages / navigation
+    // Pages / navigation / in-page sections
     const pageResults = PAGES
-      .filter(p => p.label.toLowerCase().includes(q) || p.keywords.includes(q))
+      .filter(p =>
+        p.label.toLowerCase().includes(q) ||
+        p.page.toLowerCase().includes(q) ||
+        p.keywords.includes(q)
+      )
+      .slice(0, 8)
       .map(p => ({
         type: 'page',
         id: p.to,
         title: p.label,
-        subtitle: 'Go to page',
+        subtitle: p.label === p.page ? 'Page' : p.page,
         icon: p.icon,
         to: p.to,
       }))
@@ -240,12 +293,12 @@ export default function GlobalSearch() {
     <>
       {/* Backdrop, dims the page while results are open */}
       {open && query.trim() && (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-40" />
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-30" />
       )}
 
       <div
         ref={wrapRef}
-        className="fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-1.5rem)] sm:w-full sm:max-w-xl px-0"
+        className="relative w-full max-w-xl"
       >
         <div className="relative">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-dark-tx3" />

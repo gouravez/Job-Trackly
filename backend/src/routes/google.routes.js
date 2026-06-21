@@ -2,7 +2,8 @@ import { Router } from 'express'
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { ENV } from '../config/env.js'
-import { googleAuth } from '../services/google.service.js'
+import { googleAuth } from '../services/googleAuth.service.js'
+import { googleCallback, exchangeCode } from '../controllers/google.controller.js'
 
 const router = Router()
 
@@ -10,7 +11,6 @@ const router = Router()
 // Configure Passport Google Strategy
 // ---------------------------------------------------------------------------
 const CALLBACK_URL = `${ENV.API_URL || 'http://localhost:4000'}/api/auth/google/callback`
-// console.log('Google OAuth callbackURL:', CALLBACK_URL)
 
 passport.use(
   new GoogleStrategy(
@@ -39,8 +39,7 @@ passport.use(
 )
 
 // ---------------------------------------------------------------------------
-// Step 1 — redirect user to Google consent screen
-// GET /api/auth/google
+// GET /api/auth/google — redirect user to Google consent screen
 // ---------------------------------------------------------------------------
 router.get(
   '/google',
@@ -48,29 +47,20 @@ router.get(
 )
 
 // ---------------------------------------------------------------------------
-// Step 2 — Google redirects back here after user consents
-// GET /api/auth/google/callback
+// GET /api/auth/google/callback — Google redirects back here after consent.
+// Stores a one-time code and redirects to /auth/callback?code=<code>.
+// The JWT never appears in the URL.
 // ---------------------------------------------------------------------------
 router.get(
   '/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: `${ENV.CLIENT_URL}/signin?error=google` }),
-  (req, res) => {
-    // console.log('Google callback req.user:', req.user)
-
-    if (!req.user) {
-      // console.log('No req.user — passport failed silently')
-      return res.redirect(`${ENV.CLIENT_URL}/signin?error=google`)
-    }
-
-    const { token, user } = req.user
-    // console.log('Token:', token ? 'present' : 'missing')
-    // console.log('User:', user)
-
-    const userB64 = Buffer.from(JSON.stringify(user)).toString('base64').replace(/=/g, '')
-    const url = `${ENV.CLIENT_URL}/auth/callback?token=${token}&user=${userB64}`
-    // console.log('Redirecting to:', url)
-    res.redirect(url)
-  }
+  googleCallback
 )
+
+// ---------------------------------------------------------------------------
+// POST /api/auth/google/token — frontend exchanges the one-time code for JWT.
+// { code: string } → { success: true, data: { token, user } }
+// ---------------------------------------------------------------------------
+router.post('/google/token', exchangeCode)
 
 export default router

@@ -3,11 +3,11 @@ import { cn } from "@/lib/utils";
 const variants = {
   primary: "bg-dark-accent hover:bg-dark-accent-dim text-white shadow-sm",
   secondary:
-    "bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 shadow-sm",
-  ghost: "bg-transparent hover:bg-gray-100 text-gray-700",
+    "bg-white dark:bg-dark-s2 hover:bg-gray-50 dark:hover:bg-dark-s3 text-gray-800 dark:text-dark-tx1 border border-gray-200 dark:border-dark-border shadow-sm",
+  ghost: "bg-transparent hover:bg-gray-100 dark:hover:bg-dark-s2 text-gray-700 dark:text-dark-tx2",
   dark: "bg-gray-900 hover:bg-gray-800 text-white shadow-sm",
   outline:
-    "bg-transparent border border-gray-800 text-gray-800 hover:bg-gray-50",
+    "bg-transparent border border-gray-800 dark:border-dark-border2 text-gray-800 dark:text-dark-tx1 hover:bg-gray-50 dark:hover:bg-dark-s2",
 };
 
 const sizes = {

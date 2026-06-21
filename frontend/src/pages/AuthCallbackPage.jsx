@@ -1,40 +1,46 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import useAuthStore from "@/store/authStore";
+import { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import useAuthStore from '@/store/authStore'
+import api from '@/services/api'
+
+// ---------------------------------------------------------------------------
+// AuthCallbackPage — landed here after Google OAuth redirect.
+//
+// Previously the JWT was passed as ?token= in the URL, which leaks it into
+// browser history, server logs, and Referer headers. Now the URL only carries
+// an opaque short-lived ?code= (32-byte random hex, 60 s TTL, single-use).
+// We POST that code to /api/auth/google/token and receive the JWT over HTTPS,
+// never visible in the URL.
+// ---------------------------------------------------------------------------
 
 export default function AuthCallbackPage() {
-  const navigate = useNavigate();
-  const { setAuth } = useAuthStore();
+  const navigate  = useNavigate()
+  const { setAuth } = useAuthStore()
+  const called = useRef(false) // prevent StrictMode double-invoke
 
   useEffect(() => {
-    // Read directly from window.location — avoids any React Router parsing issues
-    const raw = window.location.search;
-    const params = new URLSearchParams(raw);
-    const token = params.get("token");
-    const user = params.get("user");
+    if (called.current) return
+    called.current = true
 
-    // console.log('raw search:', raw)
-    // console.log('token:', token ? 'present' : 'missing')
-    // console.log('user:', user)
+    const params = new URLSearchParams(window.location.search)
+    const code   = params.get('code')
 
-    if (!token || !user) {
-      // console.error('Missing token or user')
-      navigate("/signin?error=google", { replace: true });
-      return;
+    if (!code) {
+      navigate('/signin?error=google', { replace: true })
+      return
     }
 
-    try {
-      const padded = user + "==".slice(0, (4 - (user.length % 4)) % 4);
-      const parsed = JSON.parse(atob(padded));
-      // console.log('parsed user:', parsed)
-      localStorage.setItem("token", token);
-      setAuth({ token, user: parsed });
-      navigate("/dashboard", { replace: true });
-    } catch (err) {
-      console.error("Decode error:", err);
-      navigate("/signin?error=google", { replace: true });
-    }
-  }, []);
+    api
+      .post('/auth/google/token', { code })
+      .then(({ data }) => {
+        const { token, user } = data.data
+        setAuth({ token, user })
+        navigate('/dashboard', { replace: true })
+      })
+      .catch(() => {
+        navigate('/signin?error=google', { replace: true })
+      })
+  }, [])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
@@ -45,5 +51,5 @@ export default function AuthCallbackPage() {
         </p>
       </div>
     </div>
-  );
+  )
 }

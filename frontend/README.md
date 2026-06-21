@@ -19,7 +19,7 @@ Job Trackly/
 │   │   ├── ui/                 # Primitive, reusable UI atoms
 │   │   │   ├── Button.jsx
 │   │   │   ├── Input.jsx
-│   │   │   ├── Logo.jsx
+│   │   │   ├── Logo.jsxr
 │   │   │   └── AvatarStack.jsx
 │   │   ├── auth/               # Auth-specific components
 │   │   │   └── SocialAuthButtons.jsx

@@ -3,11 +3,31 @@ import Logo from '@/components/ui/Logo.jsx'
 import Button from '@/components/ui/Button.jsx'
 
 const NAV_LINKS = [
-  { label: 'Features', href: '#features' },
-  { label: 'How it works', href: '#how-it-works' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'Students', href: '#students' },
+  { label: 'Features',     href: '#features'     },
+  { label: 'How it works', href: '#how-it-works'  },
+  { label: 'Pricing',      href: '#pricing'       },
+  { label: 'Students',     href: '#students'      },
 ]
+
+function scrollToSection(e, href) {
+  e.preventDefault()
+  const id = href.replace('#', '')
+  const el = document.getElementById(id)
+  if (!el) return
+
+  const smoothContent = document.querySelector('.smooth-content')
+  if (smoothContent) {
+    let top = 0
+    let node = el
+    while (node && node !== smoothContent) {
+      top += node.offsetTop
+      node = node.offsetParent
+    }
+    window.scrollTo({ top: Math.max(0, top - 64) })
+  } else {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
 
 export default function Navbar() {
   return (
@@ -20,6 +40,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
+              onClick={(e) => scrollToSection(e, link.href)}
               className="text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors"
             >
               {link.label}
