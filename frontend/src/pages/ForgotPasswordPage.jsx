@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff, ArrowLeft, KeyRound, ShieldCheck } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowLeft,
+  KeyRound,
+  ShieldCheck,
+} from "lucide-react";
 import AuthLayout from "@/components/layout/AuthLayout.jsx";
 import Button from "@/components/ui/Button.jsx";
 import Input from "@/components/ui/Input.jsx";
@@ -27,21 +35,27 @@ function Steps({ current }) {
             <div className="flex items-center gap-1.5">
               <div
                 className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors
-                  ${done   ? "bg-green-500 text-white"
-                  : active ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900"
-                           : "bg-gray-100 dark:bg-dark-s2 text-gray-400"}`}
+ ${
+   done
+     ? "bg-green-500 text-white"
+     : active
+       ? "bg-gray-900 text-white"
+       : "bg-gray-100 text-gray-400"
+ }`}
               >
                 {done ? "✓" : idx}
               </div>
               <span
                 className={`text-xs font-medium hidden sm:block
-                  ${active ? "text-gray-900 dark:text-dark-tx1" : "text-gray-400 dark:text-dark-tx3"}`}
+ ${active ? "text-gray-900" : "text-gray-400"}`}
               >
                 {label}
               </span>
             </div>
             {i < steps.length - 1 && (
-              <div className={`flex-1 h-px w-6 ${done ? "bg-green-400" : "bg-gray-200 dark:bg-dark-s3"}`} />
+              <div
+                className={`flex-1 h-px w-6 ${done ? "bg-green-400" : "bg-gray-200"}`}
+              />
             )}
           </div>
         );
@@ -52,8 +66,8 @@ function Steps({ current }) {
 
 // ── Step 1 — Email ───────────────────────────────────────────────────────────
 function StepEmail({ onNext }) {
-  const [email, setEmail]     = useState("");
-  const [error, setError]     = useState("");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -78,10 +92,10 @@ function StepEmail({ onNext }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-dark-tx1">
+        <h2 className="text-2xl font-bold text-gray-900">
           Forgot your password?
         </h2>
-        <p className="text-sm text-gray-500 dark:text-dark-tx2">
+        <p className="text-sm text-gray-500">
           Enter your email and we'll send you a 6-digit reset code.
         </p>
       </div>
@@ -93,7 +107,10 @@ function StepEmail({ onNext }) {
         placeholder="you@example.com"
         icon={Mail}
         value={email}
-        onChange={(e) => { setEmail(e.target.value); setError(""); }}
+        onChange={(e) => {
+          setEmail(e.target.value);
+          setError("");
+        }}
         error={error}
         autoFocus
       />
@@ -104,7 +121,10 @@ function StepEmail({ onNext }) {
       </Button>
 
       <p className="text-center text-sm text-gray-500">
-        <Link to="/signin" className="text-dark-accent font-semibold hover:underline inline-flex items-center gap-1">
+        <Link
+          to="/signin"
+          className="text-dark-accent font-semibold hover:underline inline-flex items-center gap-1"
+        >
           <ArrowLeft size={13} /> Back to Sign In
         </Link>
       </p>
@@ -114,11 +134,11 @@ function StepEmail({ onNext }) {
 
 // ── Step 2 — OTP ─────────────────────────────────────────────────────────────
 function StepOtp({ email, onNext, onBack }) {
-  const [otp, setOtp]         = useState("");
-  const [error, setError]     = useState("");
+  const [otp, setOtp] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
-  const [resent, setResent]   = useState(false);
+  const [resent, setResent] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -148,46 +168,51 @@ function StepOtp({ email, onNext, onBack }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-dark-tx1">
-          Check your email
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-dark-tx2">
-          We sent a 6-digit code to{" "}
-          <span className="font-semibold text-gray-700 dark:text-dark-tx1">{email}</span>.
-          It expires in 10 minutes.
+        <h2 className="text-2xl font-bold text-gray-900">Check your email</h2>
+        <p className="text-sm text-gray-500">
+          We sent a 6-digit code to{""}
+          <span className="font-semibold text-gray-700">{email}</span>. It
+          expires in 10 minutes.
         </p>
       </div>
 
       <div className="space-y-1.5">
-        <label className="text-sm font-medium text-gray-700 dark:text-dark-tx2">
-          Reset Code
-        </label>
+        <label className="text-sm font-medium text-gray-700">Reset Code</label>
         <input
           type="text"
           inputMode="numeric"
           maxLength={6}
           placeholder="000000"
           value={otp}
-          onChange={(e) => { setOtp(e.target.value.replace(/\D/g, "")); setError(""); }}
+          onChange={(e) => {
+            setOtp(e.target.value.replace(/\D/g, ""));
+            setError("");
+          }}
           autoFocus
           className={`w-full text-center text-3xl font-bold tracking-[0.5em] py-3 px-4 rounded-xl border
-            bg-white dark:bg-dark-s2 text-gray-900 dark:text-dark-tx1
-            outline-none transition-colors
-            ${error
-              ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200"
-              : "border-gray-200 dark:border-dark-border focus:border-dark-accent focus:ring-2 focus:ring-dark-accent/20"
-            }`}
+ bg-white text-gray-900 
+ outline-none transition-colors
+ ${
+   error
+     ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+     : "border-gray-200 focus:border-dark-accent focus:ring-2 focus:ring-dark-accent/20"
+ }`}
         />
         {error && <p className="text-xs text-red-500">{error}</p>}
       </div>
 
       {resent && (
-        <p className="text-xs text-green-600 dark:text-green-400 text-center">
+        <p className="text-xs text-green-600 text-center">
           ✓ A new code was sent to {email}
         </p>
       )}
 
-      <Button type="submit" size="lg" className="w-full" disabled={otp.length !== 6}>
+      <Button
+        type="submit"
+        size="lg"
+        className="w-full"
+        disabled={otp.length !== 6}
+      >
         <ShieldCheck size={16} />
         Verify Code
       </Button>
@@ -196,7 +221,7 @@ function StepOtp({ email, onNext, onBack }) {
         <button
           type="button"
           onClick={onBack}
-          className="text-gray-400 hover:text-gray-600 dark:hover:text-dark-tx1 inline-flex items-center gap-1"
+          className="text-gray-400 hover:text-gray-600 inline-flex items-center gap-1"
         >
           <ArrowLeft size={13} /> Change email
         </button>
@@ -215,12 +240,12 @@ function StepOtp({ email, onNext, onBack }) {
 
 // ── Step 3 — New password ────────────────────────────────────────────────────
 function StepNewPassword({ email, otp, onDone }) {
-  const [form, setForm]       = useState({ newPassword: "", confirm: "" });
-  const [errors, setErrors]   = useState({});
+  const [form, setForm] = useState({ newPassword: "", confirm: "" });
+  const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPw, setShowPw]   = useState(false);
-  const [showCf, setShowCf]   = useState(false);
+  const [showPw, setShowPw] = useState(false);
+  const [showCf, setShowCf] = useState(false);
 
   const handleChange = (e) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -231,21 +256,32 @@ function StepNewPassword({ email, otp, onDone }) {
   const validate = () => {
     const errs = {};
     if (form.newPassword.length < 8) errs.newPassword = "At least 8 characters";
-    if (form.confirm !== form.newPassword) errs.confirm = "Passwords don't match";
+    if (form.confirm !== form.newPassword)
+      errs.confirm = "Passwords don't match";
     return errs;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
+    }
 
     setLoading(true);
     try {
-      await authService.resetPassword({ email, otp, newPassword: form.newPassword });
+      await authService.resetPassword({
+        email,
+        otp,
+        newPassword: form.newPassword,
+      });
       onDone();
     } catch (err) {
-      setApiError(err?.response?.data?.message || "Reset failed. The code may have expired — go back and request a new one.");
+      setApiError(
+        err?.response?.data?.message ||
+          "Reset failed. The code may have expired — go back and request a new one.",
+      );
     } finally {
       setLoading(false);
     }
@@ -254,17 +290,15 @@ function StepNewPassword({ email, otp, onDone }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-dark-tx1">
-          Set a new password
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-dark-tx2">
+        <h2 className="text-2xl font-bold text-gray-900">Set a new password</h2>
+        <p className="text-sm text-gray-500">
           Choose a strong password for your account.
         </p>
       </div>
 
       {apiError && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg px-4 py-3">
-          <p className="text-sm text-red-600 dark:text-red-400">{apiError}</p>
+        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+          <p className="text-sm text-red-600">{apiError}</p>
         </div>
       )}
 
@@ -306,21 +340,20 @@ function StepNewPassword({ email, otp, onDone }) {
 function StepSuccess() {
   return (
     <div className="space-y-5 text-center">
-      <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto">
+      <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto">
         <ShieldCheck size={32} className="text-green-500" />
       </div>
       <div className="space-y-1">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-dark-tx1">
-          Password reset!
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-dark-tx2">
-          Your password has been updated. You can now sign in with your new password.
+        <h2 className="text-2xl font-bold text-gray-900">Password reset!</h2>
+        <p className="text-sm text-gray-500">
+          Your password has been updated. You can now sign in with your new
+          password.
         </p>
       </div>
       <Link
         to="/signin"
-        className="inline-flex items-center gap-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900
-          px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+        className="inline-flex items-center gap-2 bg-gray-900 text-white 
+ px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors"
       >
         Go to Sign In
       </Link>
@@ -330,9 +363,9 @@ function StepSuccess() {
 
 // ── Main page ────────────────────────────────────────────────────────────────
 export default function ForgotPasswordPage() {
-  const [step, setStep]   = useState(1);
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
-  const [otp, setOtp]     = useState("");
+  const [otp, setOtp] = useState("");
 
   return (
     <AuthLayout
@@ -347,22 +380,24 @@ export default function ForgotPasswordPage() {
 
         {step === 1 && (
           <StepEmail
-            onNext={(e) => { setEmail(e); setStep(2); }}
+            onNext={(e) => {
+              setEmail(e);
+              setStep(2);
+            }}
           />
         )}
         {step === 2 && (
           <StepOtp
             email={email}
-            onNext={(o) => { setOtp(o); setStep(3); }}
+            onNext={(o) => {
+              setOtp(o);
+              setStep(3);
+            }}
             onBack={() => setStep(1)}
           />
         )}
         {step === 3 && (
-          <StepNewPassword
-            email={email}
-            otp={otp}
-            onDone={() => setStep(4)}
-          />
+          <StepNewPassword email={email} otp={otp} onDone={() => setStep(4)} />
         )}
         {step === 4 && <StepSuccess />}
       </div>

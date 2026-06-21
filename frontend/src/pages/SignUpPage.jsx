@@ -110,10 +110,10 @@ function SignUpForm({ onOtpSent }) {
       <div className="space-y-1">
         <Logo size="lg" />
         <div className="pt-3">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-dark-tx1">
+          <h2 className="text-2xl font-bold text-gray-900">
             Create your free account
           </h2>
-          <p className="text-sm text-gray-500 dark:text-dark-tx2 mt-1">
+          <p className="text-sm text-gray-500 mt-1">
             Start organizing your job search in minutes
           </p>
         </div>
@@ -122,8 +122,8 @@ function SignUpForm({ onOtpSent }) {
       <SocialAuthButtons action="sign up" />
 
       {apiError && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg px-4 py-3">
-          <p className="text-sm text-red-600 dark:text-red-400">{apiError}</p>
+        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+          <p className="text-sm text-red-600">{apiError}</p>
         </div>
       )}
 
@@ -188,7 +188,7 @@ function SignUpForm({ onOtpSent }) {
                             : strength.score === 3
                               ? "bg-blue-400"
                               : "bg-green-500"
-                        : "bg-gray-200 dark:bg-dark-s3",
+                        : "bg-gray-200",
                     )}
                   />
                 ))}
@@ -212,7 +212,7 @@ function SignUpForm({ onOtpSent }) {
         />
 
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+          <label className="text-sm font-semibold text-gray-800">
             Where are you in your job search?
           </label>
           <div className="flex gap-2 flex-wrap">
@@ -225,7 +225,7 @@ function SignUpForm({ onOtpSent }) {
                   "px-4 py-2 rounded-lg text-sm font-medium border transition-all",
                   userType === type
                     ? "bg-[#eef2ff] border-dark-accent text-dark-accent"
-                    : "bg-white dark:bg-dark-s2 border-gray-200 dark:border-dark-border text-gray-600 dark:text-gray-300 hover:border-gray-300",
+                    : "bg-white border-gray-200 text-gray-600 hover:border-gray-300",
                 )}
               >
                 {type}
@@ -245,15 +245,16 @@ function SignUpForm({ onOtpSent }) {
               }}
               className="mt-0.5 h-4 w-4 rounded border-gray-300 accent-dark-accent cursor-pointer"
             />
-            <span className="text-sm text-gray-600 dark:text-dark-tx2">
-              I agree to the{" "}
+            <span className="text-sm text-gray-600">
+              I agree to the{""}
               <Link
                 to="/terms"
                 className="text-dark-accent hover:underline font-medium"
               >
                 Terms of Service
-              </Link>{" "}
-              and{" "}
+              </Link>
+              {""}
+              and{""}
               <Link
                 to="/privacy"
                 className="text-dark-accent hover:underline font-medium"
@@ -272,8 +273,8 @@ function SignUpForm({ onOtpSent }) {
         </Button>
       </form>
 
-      <p className="text-center text-sm text-gray-500 dark:text-dark-tx2">
-        Already have an account?{" "}
+      <p className="text-center text-sm text-gray-500">
+        Already have an account?{""}
         <Link
           to="/signin"
           className="text-dark-accent font-semibold hover:underline"
@@ -370,18 +371,14 @@ function OtpStep({ formData, onBack }) {
       <div>
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-dark-tx2 hover:text-gray-800 dark:hover:text-dark-tx1 mb-5 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 mb-5 transition-colors"
         >
           <ArrowLeft size={15} /> Back
         </button>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-dark-tx1">
-          Check your email
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-dark-tx2 mt-1">
-          We sent a 6-digit code to{" "}
-          <span className="font-semibold text-gray-800 dark:text-gray-200">
-            {formData.email}
-          </span>
+        <h2 className="text-2xl font-bold text-gray-900">Check your email</h2>
+        <p className="text-sm text-gray-500 mt-1">
+          We sent a 6-digit code to{""}
+          <span className="font-semibold text-gray-800">{formData.email}</span>
         </p>
       </div>
 
@@ -401,18 +398,18 @@ function OtpStep({ formData, onBack }) {
               autoFocus={idx === 0}
               className={cn(
                 "w-12 h-14 text-center text-2xl font-bold rounded-xl border-2 transition-all outline-none",
-                "bg-white dark:bg-dark-s2 text-gray-900 dark:text-dark-tx1",
+                "bg-white text-gray-900",
                 digit
-                  ? "border-dark-accent bg-[#eef2ff] dark:bg-dark-accent/20"
-                  : "border-gray-200 dark:border-dark-border focus:border-dark-accent",
+                  ? "border-dark-accent bg-[#eef2ff]"
+                  : "border-gray-200 focus:border-dark-accent",
               )}
             />
           ))}
         </div>
 
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg px-4 py-3">
-            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+          <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+            <p className="text-sm text-red-600">{error}</p>
           </div>
         )}
 
@@ -428,8 +425,8 @@ function OtpStep({ formData, onBack }) {
       </form>
 
       {/* Resend */}
-      <div className="text-center text-sm text-gray-500 dark:text-dark-tx2">
-        Didn't get the code?{" "}
+      <div className="text-center text-sm text-gray-500">
+        Didn't get the code?{""}
         {countdown > 0 ? (
           <span className="text-gray-400">Resend in {countdown}s</span>
         ) : (
